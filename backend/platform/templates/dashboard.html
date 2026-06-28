@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Stuttgart KI Profis</title>
+  <meta name="description" content="KI-Agentur für den Stuttgarter Mittelstand">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bgDark: '#0A0A0C',
+            surface: '#141417',
+            primary: '#00FFA3',
+            accent: '#3B82F6',
+            textMain: '#F3F4F6',
+            muted: '#82828C',
+            borderDark: '#27272A',
+          },
+          fontFamily: {
+            sans: ['Satoshi', 'Inter', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          maxWidth: { 'container': '1200px' }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::selection {
+      background-color: #00FFA3;
+      color: #0A0A0C;
+    }
+    body {
+      background-color: #0A0A0C;
+      color: #F3F4F6;
+      -webkit-font-smoothing: antialiased;
+    }
+    input, select {
+      background-color: #0A0A0C !important;
+      border-radius: 0px !important;
+      border: none !important;
+      border-bottom: 1px solid #27272A !important;
+      color: #F3F4F6 !important;
+      outline: none !important;
+      transition: border-color 0.2s ease;
+    }
+    input:focus, select:focus {
+      border-bottom: 1px solid #00FFA3 !important;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 0px;
+      display: inline-block;
+      margin-right: 6px;
+    }
+    /* Simple material symbols alignment */
+    .material-symbols-outlined {
+      font-size: 20px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased min-h-screen">
+  <header class="bg-surface border-b border-borderDark sticky top-0 z-40">
+    <nav class="max-w-container mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="/dashboard" class="flex items-center gap-3 no-underline group select-none">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" class="flex-shrink-0">
+          <polygon points="16,4 28,16 16,28 4,16" stroke="#00FFA3" stroke-width="2" fill="none"/>
+          <polygon points="16,10 22,16 16,22 10,16" stroke="#00FFA3" stroke-width="1" fill="#00FFA3" fill-opacity="0.2"/>
+        </svg>
+        <span class="text-base font-display font-medium tracking-tight text-textMain group-hover:text-primary transition-colors">Stuttgart KI Profis</span>
+      </a>
+      <div class="flex items-center gap-6">
+        <span id="user-email" class="text-xs font-mono text-muted hidden sm:inline"></span>
+        <button onclick="logout()" class="text-xs font-mono text-muted hover:text-red-400 transition-colors uppercase tracking-wider">Abmelden</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="py-12">
+    <div class="max-w-container mx-auto px-4">
+
+      <div id="loading-state" class="text-center py-24 border border-borderDark bg-surface">
+        <svg class="animate-spin w-8 h-8 mx-auto text-primary mb-4" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+        <p class="font-mono text-xs uppercase tracking-wider text-muted">Core Engine wird geladen...</p>
+      </div>
+
+      <div id="empty-state" class="hidden text-center py-24 border border-borderDark bg-surface">
+        <div class="w-16 h-16 bg-primary/10 border border-primary flex items-center justify-center mx-auto mb-6">
+          <span class="material-symbols-outlined text-primary text-3xl">smart_toy</span>
+        </div>
+        <h2 class="text-2xl font-display font-semibold text-textMain mb-2 tracking-tight">Kein aktiver KI-Agent</h2>
+        <p class="text-muted text-sm max-w-sm mx-auto mb-8">Konfiguriere jetzt deinen B2B KI-Assistenten für den Mittelstand.</p>
+        <a href="/onboarding" class="inline-flex items-center h-12 px-8 bg-primary hover:bg-white text-bgDark font-display font-semibold text-sm uppercase tracking-wider transition-colors">
+          Jetzt einrichten
+        </a>
+      </div>
+
+      <div id="dashboard-content" class="hidden space-y-8">
+        <div class="flex items-center justify-between border-b border-borderDark pb-6">
+          <div>
+            <h1 class="text-2xl sm:text-3xl font-display font-semibold text-textMain tracking-tight">Dashboard</h1>
+            <p class="text-muted text-sm mt-1">Status deiner geschäftlichen KI-Agenten</p>
+          </div>
+        </div>
+        <div id="customer-cards" class="space-y-8"></div>
+      </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="edit-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="bg-surface max-w-md w-full p-6 sm:p-10 border border-borderDark max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-borderDark">
+          <h3 class="text-lg font-display font-semibold text-textMain tracking-tight">Profil bearbeiten</h3>
+          <button onclick="closeEditModal()" class="text-muted hover:text-textMain text-2xl leading-none">&times;</button>
+        </div>
+        <form id="edit-form" class="space-y-6" onsubmit="saveProfile(event)">
+          <input type="hidden" id="edit-customer-id">
+          <div class="grid sm:grid-cols-2 gap-6">
+            <div>
+              <label class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">Firmenname</label>
+              <input type="text" id="edit-company_name" class="w-full h-11 px-2 text-sm bg-transparent">
+            </div>
+            <div>
+              <label class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">Branche</label>
+              <select id="edit-trade" class="w-full h-11 px-2 text-sm bg-transparent">
+                <option value="" class="bg-surface">Bitte wählen...</option>
+                <option value="maler" class="bg-surface">Maler / Lackierer</option>
+                <option value="elektro" class="bg-surface">Elektro / Gebäudetechnik</option>
+                <option value="shk" class="bg-surface">Sanitär / Heizung / Klima</option>
+                <option value="schreiner" class="bg-surface">Schreinerei / Innenausbau</option>
+                <option value="galabau" class="bg-surface">Garten / Landschaftsbau</option>
+                <option value="bau" class="bg-surface">Bauunternehmen / Hochbau</option>
+                <option value="fliesen" class="bg-surface">Fliesenlegertechnik</option>
+                <option value="dienstleistung" class="bg-surface">B2B Dienstleister</option>
+                <option value="sonstiges" class="bg-surface">Sonstiges</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-6">
+            <div>
+              <label class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">Straße</label>
+              <input type="text" id="edit-street" class="w-full h-11 px-2 text-sm bg-transparent">
+            </div>
+            <div>
+              <label class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">PLZ / Ort</label>
+              <input type="text" id="edit-zip_city" class="w-full h-11 px-2 text-sm bg-transparent">
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-6">
+            <div>
+              <label class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">Telefon</label>
+              <input type="tel" id="edit-phone" class="w-full h-11 px-2 text-sm bg-transparent">
+            </div>
+            <div>
+              <label class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">WhatsApp-Nummer</label>
+              <input type="tel" id="edit-whatsapp_number" class="w-full h-11 px-2 text-sm bg-transparent">
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-6">
+            <div>
+              <label class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">Stundensatz (EUR)</label>
+              <input type="number" id="edit-hourly_rate" step="5" class="w-full h-11 px-2 text-sm bg-transparent">
+            </div>
+            <div>
+              <label class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">Mitarbeiter</label>
+              <input type="number" id="edit-employees" min="1" class="w-full h-11 px-2 text-sm bg-transparent">
+            </div>
+          </div>
+          <div id="edit-error" class="hidden bg-red-950/40 border border-red-500 p-3 text-xs font-mono text-red-200"></div>
+          <div class="flex gap-4 pt-4 border-t border-borderDark">
+            <button type="button" onclick="closeEditModal()" class="flex-1 h-11 border border-borderDark text-textMain font-display font-semibold text-sm uppercase tracking-wider hover:bg-surface hover:border-muted transition-colors">Abbrechen</button>
+            <button type="submit" id="edit-save-btn" class="flex-[2] h-11 bg-primary text-bgDark font-display font-semibold text-sm uppercase tracking-wider hover:bg-white transition-colors flex items-center justify-center gap-2">
+              <span id="edit-btn-text">Speichern</span>
+              <svg id="edit-btn-spinner" class="hidden animate-spin w-4 h-4 text-bgDark" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- WhatsApp Modal -->
+    <div id="wa-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="bg-surface max-w-md w-full p-6 sm:p-10 border border-borderDark">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-borderDark">
+          <h3 class="text-lg font-display font-semibold text-textMain tracking-tight">WhatsApp verbinden</h3>
+          <button onclick="closeWaModal()" class="text-muted hover:text-textMain text-2xl leading-none">&times;</button>
+        </div>
+        <div id="wa-modal-content" class="text-center">
+          <svg class="animate-spin w-8 h-8 mx-auto text-primary mb-4" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+          <p class="font-mono text-xs uppercase tracking-wider text-muted">Verbindungsdaten werden geladen...</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const API_BASE = window.location.origin;
+    let token = localStorage.getItem('hk_token');
+    if (!token) { window.location.href = '/login'; return; }
+
+    let userEmail = '';
+    try {
+      const stored = JSON.parse(localStorage.getItem('hk_user') || '{}');
+      if (stored && stored.email) userEmail = stored.email;
+    } catch (e) { /* ignore */ }
+    const userEmailEl = document.getElementById('user-email');
+    if (userEmailEl && userEmail) userEmailEl.textContent = '// ' + userEmail;
+
+    function logout() {
+      localStorage.removeItem('hk_token');
+      localStorage.removeItem('hk_user');
+      window.location.href = '/login';
+    }
+
+    function statusBadge(status) {
+      const map = {
+        'pending': ['text-yellow-400 border border-yellow-500/30 bg-yellow-500/5', 'AUSSTEHEND'],
+        'provisioning': ['text-blue-400 border border-blue-500/30 bg-blue-500/5', 'EINRICHTUNG'],
+        'active': ['text-[#00FFA3] border border-[#00FFA3]/30 bg-[#00FFA3]/5', 'AKTIV'],
+        'error': ['text-red-400 border border-red-500/30 bg-red-500/5', 'FEHLER'],
+        'suspended': ['text-muted border border-borderDark bg-black/10', 'DEAKTIVIERT'],
+      };
+      const [cls, label] = map[status] || ['text-muted border border-borderDark bg-black/10', status.toUpperCase()];
+      return `<span class="inline-flex items-center px-2.5 py-1 text-[11px] font-mono font-medium tracking-wider ${cls}">${label}</span>`;
+    }
+
+    function connectedBadge(val) {
+      if (val) return '<span class="inline-flex items-center gap-1 text-[11px] font-mono font-medium text-[#00FFA3] uppercase tracking-wider"><span class="status-dot bg-[#00FFA3]"></span>Verbunden</span>';
+      return '<span class="inline-flex items-center gap-1 text-[11px] font-mono font-medium text-yellow-400 uppercase tracking-wider"><span class="status-dot bg-yellow-400"></span>Nicht verbunden</span>';
+    }
+
+    async function showWaConnection(customerId) {
+      document.getElementById('wa-modal').classList.remove('hidden');
+      const content = document.getElementById('wa-modal-content');
+      try {
+        const resp = await fetch(API_BASE + '/api/whatsapp/connection-token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({ customer_id: customerId }),
+        });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error);
+        content.innerHTML = `
+          <div class="p-4 bg-white max-w-[208px] mx-auto mb-6 border border-borderDark">
+            <img src="${data.qr_code_url}" alt="QR Code" class="w-44 h-44">
+          </div>
+          <p class="font-display font-semibold text-textMain mb-1 tracking-tight">WhatsApp-Verbindung einrichten</p>
+          <p class="font-mono text-xs text-muted mb-6">Service-Nummer: <strong class="text-textMain">${data.whatsapp_number}</strong></p>
+          <div class="bg-[#0A0A0C] border border-borderDark p-5 text-left text-xs font-mono space-y-3">
+            <p class="font-semibold text-primary uppercase tracking-wider">// Anleitung:</p>
+            <ol class="list-decimal list-inside text-muted space-y-2 leading-relaxed">
+              <li>WhatsApp auf deinem Gerät öffnen</li>
+              <li>Zu Verknüpfte Geräte navigieren</li>
+              <li>QR-Code scannen</li>
+              <li>Fertig! Der Agent ist nun betriebsbereit.</li>
+            </ol>
+          </div>
+          <button onclick="closeWaModal()" class="mt-6 w-full h-11 bg-primary text-bgDark font-display font-semibold text-xs uppercase tracking-wider hover:bg-white transition-colors">Schließen</button>
+        `;
+      } catch (e) {
+        content.innerHTML = `
+          <div class="text-red-400 font-mono text-xs mb-6 p-4 bg-red-950/20 border border-red-500">FEHLER: ${e.message}</div>
+          <button onclick="closeWaModal()" class="w-full h-11 border border-borderDark text-textMain font-display font-semibold text-xs uppercase tracking-wider hover:bg-surface transition-colors">Schließen</button>
+        `;
+      }
+    }
+
+    function closeWaModal() {
+      document.getElementById('wa-modal').classList.add('hidden');
+    }
+
+    let _editCustomerData = null;
+
+    async function openEditProfile(customerId) {
+      _editCustomerData = null;
+      try {
+        const resp = await fetch(API_BASE + '/api/customer/' + customerId, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error);
+        _editCustomerData = data.customer;
+        document.getElementById('edit-customer-id').value = customerId;
+        document.getElementById('edit-company_name').value = data.customer.company_name || '';
+        document.getElementById('edit-trade').value = data.customer.trade || '';
+        document.getElementById('edit-street').value = data.customer.street || '';
+        document.getElementById('edit-zip_city').value = data.customer.zip_city || '';
+        document.getElementById('edit-phone').value = data.customer.phone || '';
+        document.getElementById('edit-whatsapp_number').value = data.customer.whatsapp_number || '';
+        document.getElementById('edit-hourly_rate').value = data.customer.hourly_rate || 55;
+        document.getElementById('edit-employees').value = data.customer.employees || 1;
+        document.getElementById('edit-error').classList.add('hidden');
+        document.getElementById('edit-modal').classList.remove('hidden');
+      } catch (e) {
+        alert('Fehler beim Laden: ' + e.message);
+      }
+    }
+
+    function closeEditModal() {
+      document.getElementById('edit-modal').classList.add('hidden');
+    }
+
+    async function saveProfile(event) {
+      event.preventDefault();
+      const cid = document.getElementById('edit-customer-id').value;
+      const errEl = document.getElementById('edit-error');
+      const btnText = document.getElementById('edit-btn-text');
+      const spinner = document.getElementById('edit-btn-spinner');
+      errEl.classList.add('hidden');
+      btnText.textContent = 'Speichern...';
+      spinner.classList.remove('hidden');
+
+      const updates = {
+        company_name: document.getElementById('edit-company_name').value.trim(),
+        trade: document.getElementById('edit-trade').value,
+        street: document.getElementById('edit-street').value.trim(),
+        zip_city: document.getElementById('edit-zip_city').value.trim(),
+        phone: document.getElementById('edit-phone').value.trim(),
+        whatsapp_number: document.getElementById('edit-whatsapp_number').value.trim(),
+        hourly_rate: parseFloat(document.getElementById('edit-hourly_rate').value) || 55,
+        employees: parseInt(document.getElementById('edit-employees').value) || 1,
+      };
+
+      try {
+        const resp = await fetch(API_BASE + '/api/customer/' + cid, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify(updates),
+        });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error);
+        closeEditModal();
+        window.location.reload();
+      } catch (e) {
+        errEl.textContent = 'Fehler: ' + e.message;
+        errEl.classList.remove('hidden');
+        btnText.textContent = 'Speichern';
+        spinner.classList.add('hidden');
+      }
+    }
+
+    async function startCheckout(customerId) {
+      const btn = document.getElementById('checkout-' + customerId);
+      if (btn) { btn.disabled = true; btn.textContent = 'Wird weitergeleitet...'; }
+      try {
+        const resp = await fetch(API_BASE + '/api/create-checkout-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({
+            customer_id: customerId,
+            success_url: window.location.origin + '/dashboard',
+            cancel_url: window.location.origin + '/dashboard',
+          }),
+        });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error);
+        if (data.dev_mode) {
+          // Dev mode - reload to show activated status
+          alert('DEV-Modus: Zahlung simuliert. Agent wird eingerichtet.');
+          window.location.reload();
+        } else if (data.checkout_url) {
+          window.location.href = data.checkout_url;
+        }
+      } catch (e) {
+        alert('Fehler: ' + e.message);
+        if (btn) { btn.disabled = false; btn.textContent = 'Bezahlen'; }
+      }
+    }
+
+    async function loadDashboard() {
+      try {
+        const [custResp, priceResp] = await Promise.all([
+          fetch(API_BASE + '/api/customers', { headers: { 'Authorization': 'Bearer ' + token } }),
+          fetch(API_BASE + '/api/pricing', { headers: { 'Authorization': 'Bearer ' + token } }).catch(() => null),
+        ]);
+        const data = await custResp.json();
+        const pricing = priceResp ? await priceResp.json() : { plans: {} };
+        const plans = pricing.plans || {};
+
+        document.getElementById('loading-state').classList.add('hidden');
+        if (!custResp.ok || !data.customers || data.customers.length === 0) {
+          document.getElementById('empty-state').classList.remove('hidden');
+          return;
+        }
+
+        document.getElementById('dashboard-content').classList.remove('hidden');
+        const container = document.getElementById('customer-cards');
+        container.innerHTML = '';
+
+        data.customers.forEach(c => {
+          const inst = c.instance || {};
+          const isPending = c.status === 'pending' || inst.status === 'pending';
+          const needsPayment = c.status === 'pending' || c.status === 'provisioning';
+          const isEnterprise = c.plan === 'enterprise';
+
+          let paymentSection = '';
+          if (needsPayment) {
+            const p = plans[c.plan] || {};
+            const priceStr = p.price ? (p.price / 100).toFixed(0) : (c.plan === 'basis' ? '19' : c.plan === 'pro' ? '39' : '79');
+            paymentSection = `
+              <div class="mt-6 border border-yellow-500/20 bg-yellow-500/5 p-5">
+                <div class="flex items-center justify-between gap-4 flex-wrap sm:flex-nowrap">
+                  <div>
+                    <p class="text-sm font-display font-semibold text-yellow-500 tracking-tight">Systemaktivierung erforderlich</p>
+                    <p class="font-mono text-xs text-muted mt-1">${priceStr} EUR / Monat &middot; ${c.plan === 'basis' ? 'Basis' : c.plan === 'pro' ? 'Pro' : 'Enterprise'} Tarif</p>
+                  </div>
+                  <button id="checkout-${c.customer_id}" onclick="startCheckout('${c.customer_id}')"
+                    class="h-10 px-6 bg-primary hover:bg-white text-bgDark font-display font-semibold text-xs uppercase tracking-wider transition-colors">
+                    Aktivieren
+                  </button>
+                </div>
+              </div>
+            `;
+          }
+
+          let waSection = '';
+          if (c.status === 'active' && !inst.whatsapp_connected) {
+            waSection = `
+              <div class="mt-6 border border-yellow-500/20 bg-yellow-500/5 p-5">
+                <div class="flex items-center justify-between gap-4 flex-wrap sm:flex-nowrap">
+                  <div class="flex items-start gap-3">
+                    <span class="material-symbols-outlined text-yellow-500 mt-0.5">warning</span>
+                    <div>
+                      <p class="text-sm font-display font-semibold text-yellow-500 tracking-tight">WhatsApp-Schnittstelle inaktiv</p>
+                      <p class="font-mono text-xs text-muted mt-1">Verbinde die Rufnummer für produktive Mandate und Sprach-Anfragen.</p>
+                    </div>
+                  </div>
+                  <button onclick="showWaConnection('${c.customer_id}')"
+                    class="h-10 px-6 bg-primary hover:bg-white text-bgDark font-display font-semibold text-xs uppercase tracking-wider transition-colors">
+                    Verbinden
+                  </button>
+                </div>
+              </div>
+            `;
+          }
+
+          if (c.status === 'active' && inst.whatsapp_connected) {
+            waSection = `
+              <div class="mt-6 border border-[#00FFA3]/20 bg-[#00FFA3]/5 p-5">
+                <div class="flex items-center gap-3">
+                  <span class="material-symbols-outlined text-[#00FFA3]">check_circle</span>
+                  <div>
+                    <p class="text-sm font-display font-semibold text-[#00FFA3] tracking-tight">WhatsApp-Schnittstelle betriebsbereit</p>
+                    <p class="font-mono text-xs text-muted mt-0.5">Sende eine Audionachricht an ${c.whatsapp_number || 'deinen Agenten'}.</p>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          // Enterprise: dedicated instance deploy button
+          let deploySection = '';
+          if (isEnterprise && c.status === 'active' && inst.status !== 'running') {
+            deploySection = `
+              <div class="mt-6 border border-blue-500/20 bg-blue-500/5 p-5">
+                <div class="flex items-center justify-between gap-4 flex-wrap sm:flex-nowrap">
+                  <div>
+                    <p class="text-sm font-display font-semibold text-blue-400 tracking-tight border-b border-blue-500/10 pb-1 mb-1">Dedizierter Server bereit für Provisionierung</p>
+                    <p class="font-mono text-xs text-muted">Aktiviert hochperformantes Hosting für komplexe B2B Workloads.</p>
+                  </div>
+                  <button onclick="deployDedicated('${c.customer_id}')"
+                    class="h-10 px-6 bg-blue-600 hover:bg-blue-500 text-textMain font-display font-semibold text-xs uppercase tracking-wider transition-colors">
+                    Instanziieren
+                  </button>
+                </div>
+              </div>
+            `;
+          }
+
+          const card = `
+            <div class="bg-surface border border-borderDark p-6 sm:p-8">
+              <div class="flex items-start justify-between flex-wrap gap-4 border-b border-borderDark pb-6 mb-6">
+                <div>
+                  <h3 class="text-2xl font-display font-semibold text-textMain tracking-tight">${c.company_name || c.customer_id}</h3>
+                  <div class="flex items-center gap-3 mt-2 flex-wrap font-mono text-xs">
+                    <span class="text-muted tracking-tight">ID: ${c.customer_id}</span>
+                    <span class="text-borderDark">|</span>
+                    ${statusBadge(c.status)}
+                  </div>
+                </div>
+                <div class="flex items-start gap-4">
+                  <div class="text-right font-mono text-xs">
+                    <p class="font-bold text-textMain">${c.plan === 'basis' ? 'Basis (19€)' : c.plan === 'pro' ? 'Pro (39€)' : 'Enterprise (79€)'}</p>
+                    <p class="text-muted mt-0.5">Core Engine</p>
+                  </div>
+                  <button onclick="openEditProfile('${c.customer_id}')" class="p-2 border border-borderDark text-muted hover:text-primary hover:border-primary transition-colors" title="Profil bearbeiten">
+                    <span class="material-symbols-outlined">edit</span>
+                  </button>
+                </div>
+              </div>
+
+              ${paymentSection}
+              ${waSection}
+
+              <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+                <div class="border border-borderDark bg-[#0A0A0C] p-4 font-mono">
+                  <p class="text-[10px] uppercase text-muted tracking-wider mb-2">// Server Rufnummer</p>
+                  <p class="text-sm font-semibold text-textMain">${c.whatsapp_number || 'Nicht gesetzt'}</p>
+                </div>
+                <div class="border border-borderDark bg-[#0A0A0C] p-4 font-mono">
+                  <p class="text-[10px] uppercase text-muted tracking-wider mb-2">// Stundensatz</p>
+                  <p class="text-sm font-semibold text-textMain">${c.hourly_rate} EUR / h</p>
+                </div>
+                <div class="border border-borderDark bg-[#0A0A0C] p-4 font-mono">
+                  <p class="text-[10px] uppercase text-muted tracking-wider mb-2">// Mitarbeiter</p>
+                  <p class="text-sm font-semibold text-textMain">${c.employees}</p>
+                </div>
+                <div class="border border-borderDark bg-[#0A0A0C] p-4 font-mono">
+                  <p class="text-[10px] uppercase text-muted tracking-wider mb-2">// Branche</p>
+                  <p class="text-sm font-semibold text-textMain">${c.trade || '-'}</p>
+                </div>
+              </div>
+
+              <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+                <div class="border border-borderDark bg-[#0A0A0C] p-4 font-mono">
+                  <p class="text-[10px] uppercase text-muted tracking-wider mb-2">// Whatsapp Link</p>
+                  ${connectedBadge(inst.whatsapp_connected)}
+                </div>
+                <div class="border border-borderDark bg-[#0A0A0C] p-4 font-mono">
+                  <p class="text-[10px] uppercase text-muted tracking-wider mb-2">// Port</p>
+                  <p class="text-sm font-semibold text-textMain">${inst.port || '-'}</p>
+                </div>
+                <div class="border border-borderDark bg-[#0A0A0C] p-4 font-mono">
+                  <p class="text-[10px] uppercase text-muted tracking-wider mb-2">// System-Status</p>
+                  <p class="text-sm font-semibold ${inst.status === 'running' ? 'text-[#00FFA3]' : inst.status === 'error' ? 'text-red-400' : 'text-muted'} uppercase tracking-wider">${inst.status === 'running' ? 'LÄUFT' : inst.status === 'pending' ? 'EINRICHTUNG' : inst.status || '-'}</p>
+                </div>
+                <div class="border border-borderDark bg-[#0A0A0C] p-4 font-mono">
+                  <p class="text-[10px] uppercase text-muted tracking-wider mb-2">// System Start</p>
+                  <p class="text-sm font-semibold text-textMain">${c.created_at ? new Date(c.created_at).toLocaleDateString('de-DE') : '-'}</p>
+                </div>
+              </div>
+
+              ${deploySection}
+
+              ${isPending ? `
+              <div class="mt-6 border border-blue-500/20 bg-blue-500/5 p-5 flex items-center gap-3 font-mono text-xs">
+                <svg class="animate-spin w-5 h-5 text-blue-400 flex-shrink-0" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                <div>
+                  <p class="text-sm font-display font-semibold text-blue-400 tracking-tight">Systemeinrichtung wird ausgeführt</p>
+                  <p class="text-muted mt-1 leading-normal">Die Docker Umgebung wird initialisiert. Bitte lade das Steuerungspanel in wenigen Sekunden neu.</p>
+                </div>
+              </div>
+              ` : ''}
+            </div>
+          `;
+          container.innerHTML += card;
+        });
+      } catch (e) {
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('dashboard-content').classList.remove('hidden');
+        document.getElementById('customer-cards').innerHTML = `
+          <div class="bg-red-950/20 border border-red-500 p-6 text-center font-mono text-xs">
+            <p class="text-red-400 font-bold uppercase tracking-wider">// Verbindungsfehler</p>
+            <p class="text-muted mt-1 pb-4">Die API-Schnittstelle konnte nicht erreicht werden.</p>
+            <button onclick="window.location.reload()" class="h-10 px-6 bg-red-500 text-bgDark font-display font-semibold uppercase tracking-wider transition-colors inline-block text-xs">Neu laden</button>
+          </div>
+        `;
+      }
+    }
+
+    async function deployDedicated(customerId) {
+      try {
+        const resp = await fetch(API_BASE + '/api/deploy/dedicated', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({ customer_id: customerId }),
+        });
+        const data = await resp.json();
+        if (!resp.ok) { alert('Fehler: ' + (data.error || 'Unbekannter Fehler')); return; }
+        alert('Dedizierte Instanz wird bereitgestellt: ' + data.message);
+        window.location.reload();
+      } catch (e) { alert('Fehler: ' + e.message); }
+    }
+
+    loadDashboard();
+  </script>
+</body>
+</html>

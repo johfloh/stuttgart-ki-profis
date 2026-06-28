@@ -1,0 +1,23 @@
+colors:
+  primary:
+  - 25
+  - 60
+  - 120
+  secondary:
+  - 100
+  - 100
+  - 100
+company:
+  geschaeftsfuehrer: ''
+  mail: johannes.flohe@outlook.com
+  name: Maler Hello
+  plz_ort: Stuttgart
+  steuer: DE123456675
+  strasse: Hohentwielstraße 124
+  tel: '+4917696995345'
+defaults:
+  gueltig_bis_tage: 30
+  zahlungsziel_tage: 14
+logo_path: ''
+whatsapp:
+  number: '+4917696995345'

@@ -1,0 +1,1 @@
+"""Stuttgart KI Profis SaaS Platform - automated onboarding & provisioning."""

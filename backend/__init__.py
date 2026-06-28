@@ -1,0 +1,1 @@
+# Stuttgart KI Profis Agent - Productized subagent for handyman quote generation

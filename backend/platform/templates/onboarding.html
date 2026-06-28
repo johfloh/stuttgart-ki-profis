@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Einrichtung - Stuttgart KI Profis</title>
+  <meta name="description" content="KI-Agentur für den Stuttgarter Mittelstand">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bgDark: '#0A0A0C',
+            surface: '#141417',
+            primary: '#00FFA3',
+            accent: '#3B82F6',
+            textMain: '#F3F4F6',
+            muted: '#82828C',
+            borderDark: '#27272A',
+          },
+          fontFamily: {
+            sans: ['Satoshi', 'Inter', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          maxWidth: { container: '1200px' },
+        },
+      },
+    }
+  </script>
+  <style>
+    ::selection {
+      background-color: #00FFA3;
+      color: #0A0A0C;
+    }
+    body {
+      background-color: #0A0A0C;
+      color: #F3F4F6;
+      -webkit-font-smoothing: antialiased;
+    }
+    input, select {
+      background-color: #0A0A0C !important;
+      border-radius: 0px !important;
+      border: none !important;
+      border-bottom: 1px solid #27272A !important;
+      color: #F3F4F6 !important;
+      outline: none !important;
+      transition: border-color 0.2s ease;
+    }
+    input:focus, select:focus {
+      border-bottom: 1px solid #00FFA3 !important;
+    }
+    .plan-option {
+      transition: all 0.2s ease;
+      background-color: #141417;
+      border: 1px solid #27272A;
+      border-radius: 0px;
+    }
+    .plan-option:hover {
+      border-color: #3B82F6 !important;
+    }
+    .plan-option.selected {
+      border-color: #00FFA3 !important;
+      background: #141417;
+    }
+    .btn-primary {
+      background: #00FFA3;
+      color: #0A0A0C;
+      font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif;
+      border-radius: 0px;
+    }
+    .btn-primary:hover {
+      background: #white;
+      color: #0A0A0C;
+    }
+    .btn-primary:disabled {
+      background: #27272A;
+      color: #82828C;
+      cursor: not-allowed;
+    }
+    .btn-secondary {
+      background: transparent;
+      color: #F3F4F6;
+      border: 1px solid #27272A;
+      font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif;
+      border-radius: 0px;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+    .btn-secondary:hover {
+      background: #141417;
+      border-color: #82828C;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased min-h-screen">
+  <header class="bg-surface border-b border-borderDark sticky top-0 z-40">
+    <nav class="max-w-container mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="/dashboard" class="flex items-center gap-3 no-underline group select-none">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" class="flex-shrink-0">
+          <polygon points="16,4 28,16 16,28 4,16" stroke="#00FFA3" stroke-width="2" fill="none"/>
+          <polygon points="16,10 22,16 16,22 10,16" stroke="#00FFA3" stroke-width="1" fill="#00FFA3" fill-opacity="0.2"/>
+        </svg>
+        <span class="text-base font-display font-medium tracking-tight text-textMain group-hover:text-primary transition-colors">Stuttgart KI Profis</span>
+      </a>
+      <span class="text-xs font-mono text-muted">Step // <span id="step-indicator" class="text-primary">1</span>.03</span>
+    </nav>
+  </header>
+
+  <main class="py-12 sm:py-20">
+    <div class="max-w-2xl mx-auto px-4">
+
+      <!-- Progress steps -->
+      <div class="flex items-center gap-1.5 mb-12">
+        <div class="h-1 flex-1 bg-primary" id="progress-1"></div>
+        <div class="h-1 flex-1 bg-borderDark" id="progress-2"></div>
+        <div class="h-1 flex-1 bg-borderDark" id="progress-3"></div>
+      </div>
+
+      <!-- Step 1: Business Info -->
+      <div id="step-1" class="bg-surface p-6 sm:p-10 border border-borderDark">
+        <h2 class="text-2xl font-display font-semibold text-textMain mb-2 tracking-tight">Dein Betrieb</h2>
+        <p class="text-muted text-sm mb-8">Erzähle uns von deinem Unternehmen für die KI-Personalisierung.</p>
+        <div class="space-y-8">
+          <div>
+            <label class="block font-mono text-xs uppercase tracking-wider text-muted mb-4">Tarif wählen *</label>
+            <div class="grid grid-cols-3 gap-3">
+              <label class="plan-option border p-5 cursor-pointer text-center relative" data-plan="basis">
+                <input type="radio" name="plan" value="basis" class="hidden">
+                <span class="text-2xl font-display font-bold text-textMain block mb-0.5">19€</span>
+                <span class="font-mono text-[10px] text-muted uppercase tracking-wider block">Basis</span>
+              </label>
+              <label class="plan-option selected border p-5 cursor-pointer text-center relative" data-plan="pro">
+                <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-primary text-bgDark text-[9px] font-mono font-bold uppercase tracking-wider">Beliebt</div>
+                <input type="radio" name="plan" value="pro" class="hidden" checked>
+                <span class="text-2xl font-display font-bold text-textMain block mb-0.5">39€</span>
+                <span class="font-mono text-[10px] text-primary uppercase tracking-wider block">Pro</span>
+              </label>
+              <label class="plan-option border p-5 cursor-pointer text-center relative" data-plan="enterprise">
+                <input type="radio" name="plan" value="enterprise" class="hidden">
+                <span class="text-2xl font-display font-bold text-textMain block mb-0.5">79€</span>
+                <span class="font-mono text-[10px] text-muted uppercase tracking-wider block">Enterprise</span>
+              </label>
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-6">
+            <div>
+              <label for="company_name" class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">Firmenname *</label>
+              <input type="text" id="company_name" required class="w-full h-12 px-2 text-sm bg-transparent font-medium" placeholder="Echtzeit Elektro GmbH">
+            </div>
+            <div>
+              <label for="trade" class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">Branche / Gewerk</label>
+              <select id="trade" class="w-full h-12 px-2 text-sm bg-transparent appearance-none">
+                <option value="" class="bg-surface">Bitte wählen...</option>
+                <option value="maler" class="bg-surface">Maler / Lackierer</option>
+                <option value="elektro" class="bg-surface">Elektro / Gebäudetechnik</option>
+                <option value="shk" class="bg-surface">Sanitär / Heizung / Klima</option>
+                <option value="schreiner" class="bg-surface">Schreinerei / Innenausbau</option>
+                <option value="galabau" class="bg-surface">Garten- / Landschaftsbau</option>
+                <option value="bau" class="bg-surface">Bauunternehmen / Hochbau</option>
+                <option value="fliesen" class="bg-surface">Fliesenlegertechnik</option>
+                <option value="dienstleistung" class="bg-surface">B2B Dienstleister</option>
+                <option value="sonstiges" class="bg-surface">Sonstiges</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-6">
+            <div>
+              <label for="street" class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">Straße / Hausnummer</label>
+              <input type="text" id="street" class="w-full h-12 px-2 text-sm bg-transparent" placeholder="Königstraße 12">
+            </div>
+            <div>
+              <label for="zip_city" class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">PLZ / Ort</label>
+              <input type="text" id="zip_city" class="w-full h-12 px-2 text-sm bg-transparent" placeholder="70173 Stuttgart">
+            </div>
+          </div>
+          <div>
+            <label for="employees" class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">Mitarbeiteranzahl</label>
+            <input type="number" id="employees" value="1" min="1" max="500" class="w-full h-12 px-2 text-sm bg-transparent">
+          </div>
+        </div>
+        <button onclick="nextStep(2)" class="btn-primary mt-12 w-full h-12 text-sm uppercase tracking-wider font-semibold">Weiter</button>
+      </div>
+
+      <!-- Step 2: Contact -->
+      <div id="step-2" class="hidden bg-surface p-6 sm:p-10 border border-borderDark">
+        <h2 class="text-2xl font-display font-semibold text-textMain mb-2 tracking-tight">Kontaktdaten</h2>
+        <p class="text-muted text-sm mb-8">Deine WhatsApp-Nummer ist der direkte Kanal zu deinem persönlichen KI-Agenten.</p>
+        <div class="space-y-8">
+          <div>
+            <label for="whatsapp_number" class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">WhatsApp-Nummer (Agent) *</label>
+            <input type="tel" id="whatsapp_number" required class="w-full h-12 px-2 text-sm bg-transparent" placeholder="+49 176 12345678">
+            <p class="text-[11px] text-muted font-mono mt-1.5 leading-relaxed">Die Portierungs- oder Mobilfunknummer, über die dein KI-Agent antwortet.</p>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-6">
+            <div>
+              <label for="phone" class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">Telefon (Festnetz)</label>
+              <input type="tel" id="phone" class="w-full h-12 px-2 text-sm bg-transparent" placeholder="+49 711 123456">
+            </div>
+            <div>
+              <label for="email" class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">E-Mail für Angebote</label>
+              <input type="email" id="email" class="w-full h-12 px-2 text-sm bg-transparent" placeholder="info@firma.de">
+            </div>
+          </div>
+          <div>
+            <label for="vat_id" class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">USt-IdNr. / Steuernummer</label>
+            <input type="text" id="vat_id" class="w-full h-12 px-2 text-sm bg-transparent" placeholder="DE123456789">
+          </div>
+          <div>
+            <label for="hourly_rate" class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">Stundensatz (EUR)</label>
+            <input type="number" id="hourly_rate" value="65" step="5" min="20" max="500" class="w-full h-12 px-2 text-sm bg-transparent">
+          </div>
+        </div>
+        <div class="flex gap-4 mt-12">
+          <button onclick="prevStep(1)" class="btn-secondary flex-1 h-12 text-sm uppercase tracking-wider">Zurück</button>
+          <button onclick="nextStep(3)" class="btn-primary flex-[2] h-12 text-sm uppercase tracking-wider">Weiter</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Summary -->
+      <div id="step-3" class="hidden bg-surface p-6 sm:p-10 border border-borderDark">
+        <h2 class="text-2xl font-display font-semibold text-textMain mb-2 tracking-tight">Überprüfung</h2>
+        <p class="text-muted text-sm mb-8">Zusammenfassung deiner Systemkonfiguration für Stuttgart KI Profis.</p>
+        <div id="summary" class="bg-[#0A0A0C] border border-borderDark p-6 space-y-4 text-sm font-mono mb-8"></div>
+        <div id="error-msg" class="hidden bg-red-950/40 border border-red-500 p-4 text-sm font-mono text-red-200 mb-6"></div>
+        <button onclick="submitOnboarding()" id="submit-btn" class="btn-primary w-full h-14 text-base uppercase tracking-wider flex items-center justify-center gap-2">
+          <span id="submit-text">KI-Agent initialisieren</span>
+          <svg id="submit-spinner" class="hidden animate-spin w-5 h-5 text-bgDark" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+        </button>
+        <button onclick="prevStep(2)" class="btn-secondary w-full h-12 mt-4 text-sm uppercase tracking-wider">Zurück</button>
+      </div>
+
+      <!-- Success -->
+      <div id="success-state" class="hidden bg-surface p-10 border border-primary text-center">
+        <div class="w-16 h-16 bg-primary/10 border border-primary flex items-center justify-center mx-auto mb-6">
+          <span class="material-symbols-outlined text-primary text-3xl">done</span>
+        </div>
+        <h3 class="text-2xl font-display font-semibold text-textMain mb-2 tracking-tight">Agent wird generiert...</h3>
+        <p class="text-muted text-sm max-w-sm mx-auto mb-8">Dein geschäftlicher KI-Assistent wird jetzt im Stuttgarter Backend initialisiert. Dies dauert rund 30 Sekunden.</p>
+        <a href="/dashboard" class="inline-flex items-center justify-center h-12 px-8 bg-primary hover:bg-white text-bgDark font-display font-semibold text-sm uppercase tracking-wider transition-colors">Zum Dashboard</a>
+      </div>
+
+      <!-- Error fallback -->
+      <div id="error-state" class="hidden bg-surface p-10 border border-red-500 text-center">
+        <div class="w-16 h-16 bg-red-500/10 border border-red-500 flex items-center justify-center mx-auto mb-6">
+          <span class="material-symbols-outlined text-red-400 text-3xl">error</span>
+        </div>
+        <h3 class="text-2xl font-display font-semibold text-textMain mb-2 tracking-tight">Einrichtung fehlgeschlagen</h3>
+        <p id="error-state-msg" class="text-muted text-sm max-w-sm mx-auto mb-8">Es ist ein Fehler aufgetreten. Bitte versuche es erneut.</p>
+        <button onclick="location.reload()" class="inline-flex items-center justify-center h-12 px-8 bg-primary hover:bg-white text-bgDark font-display font-semibold text-sm uppercase tracking-wider transition-colors">Erneut versuchen</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      'use strict';
+
+      const token = localStorage.getItem('hk_token');
+      if (!token) {
+        window.location.href = '/login';
+        return;
+      }
+
+      let currentStep = 1;
+      const formData = { plan: 'pro' };
+
+      function showStep(n) {
+        const steps = ['step-1', 'step-2', 'step-3'];
+        steps.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.add('hidden');
+        });
+        const target = document.getElementById('step-' + n);
+        if (target) target.classList.remove('hidden');
+        currentStep = n;
+        document.getElementById('step-indicator').textContent = n;
+        for (let i = 1; i <= 3; i++) {
+          const bar = document.getElementById('progress-' + i);
+          if (bar) {
+            bar.className = 'h-1 flex-1 transition-all ' + (i <= n ? 'bg-primary' : 'bg-borderDark');
+          }
+        }
+      }
+
+      window.nextStep = function(n) {
+        if (n === 2) {
+          const name = document.getElementById('company_name');
+          if (!name || !name.value.trim()) {
+            name.focus();
+            name.style.borderBottom = '1px solid #EF4444';
+            setTimeout(() => { name.style.borderBottom = ''; }, 2000);
+            return;
+          }
+          formData.company_name = document.getElementById('company_name').value.trim();
+          formData.trade = document.getElementById('trade').value;
+          formData.street = document.getElementById('street').value.trim();
+          formData.zip_city = document.getElementById('zip_city').value.trim();
+          formData.employees = parseInt(document.getElementById('employees').value) || 1;
+          const checkedPlan = document.querySelector('input[name="plan"]:checked');
+          formData.plan = checkedPlan ? checkedPlan.value : 'pro';
+        }
+        if (n === 3) {
+          const wa = document.getElementById('whatsapp_number');
+          if (!wa || !wa.value.trim()) {
+            wa.focus();
+            wa.style.borderBottom = '1px solid #EF4444';
+            setTimeout(() => { wa.style.borderBottom = ''; }, 2000);
+            return;
+          }
+          formData.whatsapp_number = document.getElementById('whatsapp_number').value.trim();
+          formData.phone = document.getElementById('phone').value.trim();
+          formData.email = document.getElementById('email').value.trim();
+          formData.vat_id = document.getElementById('vat_id').value.trim();
+          formData.hourly_rate = parseFloat(document.getElementById('hourly_rate').value) || 65;
+
+          const planLabel = { basis: 'Basis (19 EUR)', pro: 'Pro (39 EUR)', enterprise: 'Enterprise (79 EUR)' };
+          const planPrice = { basis: '19', pro: '39', enterprise: '79' };
+          const s = document.getElementById('summary');
+          if (s) {
+            s.innerHTML =
+              '<div class="flex justify-between py-1.5 border-b border-borderDark/60"><span class="text-muted">FIRMA</span><span class="font-bold text-textMain">' + formData.company_name + '</span></div>' +
+              '<div class="flex justify-between py-1.5 border-b border-borderDark/60"><span class="text-muted">BRANCHE</span><span class="font-bold text-textMain">' + (formData.trade || '-') + '</span></div>' +
+              '<div class="flex justify-between py-1.5 border-b border-borderDark/60"><span class="text-muted">WHATSAPP</span><span class="font-bold text-textMain">' + formData.whatsapp_number + '</span></div>' +
+              '<div class="flex justify-between py-1.5 border-b border-borderDark/60"><span class="text-muted">STUNDENSATZ</span><span class="font-bold text-textMain">' + formData.hourly_rate + ' EUR/h</span></div>' +
+              '<div class="flex justify-between py-1.5 border-b border-borderDark/60"><span class="text-muted">MITARBEITER</span><span class="font-bold text-textMain">' + formData.employees + '</span></div>' +
+              '<div class="flex justify-between py-1.5 border-b border-borderDark/60"><span class="text-muted">TARIF</span><span class="font-bold text-textMain">' + (planLabel[formData.plan] || formData.plan) + '</span></div>' +
+              '<div class="pt-4 flex justify-between items-baseline"><span class="text-primary font-bold">MONATLICH</span><span class="font-bold text-2xl text-primary">' + (planPrice[formData.plan] || '39') + ' EUR</span></div>';
+          }
+        }
+        showStep(n);
+      };
+
+      window.prevStep = function(n) {
+        showStep(n);
+      };
+
+      window.submitOnboarding = async function() {
+        const btn = document.getElementById('submit-btn');
+        const txt = document.getElementById('submit-text');
+        const spn = document.getElementById('submit-spinner');
+        const err = document.getElementById('error-msg');
+
+        err.classList.add('hidden');
+        txt.textContent = 'Wird eingerichtet...';
+        spn.classList.remove('hidden');
+        btn.disabled = true;
+
+        try {
+          const resp = await fetch('/api/onboarding', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify(formData),
+          });
+          const result = await resp.json();
+          if (!resp.ok) {
+            err.textContent = result.error || 'Fehler beim Einrichten des KI-Agenten.';
+            err.classList.remove('hidden');
+            txt.textContent = 'KI-Agent initialisieren';
+            spn.classList.add('hidden');
+            btn.disabled = false;
+            return;
+          }
+          document.getElementById('step-3').classList.add('hidden');
+          document.getElementById('success-state').classList.remove('hidden');
+          // Ensure user data is in localStorage
+          try {
+            const meResp = await fetch('/api/me', { headers: { 'Authorization': 'Bearer ' + token } });
+            const meData = await meResp.json();
+            if (meData.ok && meData.user) {
+              localStorage.setItem('hk_user', JSON.stringify(meData.user));
+            }
+          } catch(e) { /* non-critical */ }
+        } catch (e) {
+          document.getElementById('step-3').classList.add('hidden');
+          document.getElementById('error-state').classList.remove('hidden');
+          document.getElementById('error-state-msg').textContent = e.message || 'Verbindungsfehler. Bitte versuche es erneut.';
+        }
+      };
+
+      // Plan selector
+      document.querySelectorAll('.plan-option').forEach(function(el) {
+        el.addEventListener('click', function() {
+          document.querySelectorAll('.plan-option').forEach(function(o) {
+            o.classList.remove('selected');
+            o.style.borderColor = '#27272A';
+          });
+          this.classList.add('selected');
+          this.style.borderColor = '#00FFA3';
+          var radio = this.querySelector('input[name="plan"]');
+          if (radio) radio.checked = true;
+        });
+      });
+
+      // Handle Enter key to advance
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          var active = document.activeElement;
+          if (active && active.tagName === 'INPUT' && active.id !== 'password') {
+            e.preventDefault();
+            if (currentStep === 1) window.nextStep(2);
+            else if (currentStep === 2) window.nextStep(3);
+          }
+        }
+      });
+
+    })();
+  </script>
+</body>
+</html>

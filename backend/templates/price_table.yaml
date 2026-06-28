@@ -1,0 +1,105 @@
+# ============================================================
+# Handwerker-KI Preisliste (Preisliste / Price Table)
+# ============================================================
+# Jeder Handwerker bekommt seine eigene Preisliste.
+# Der Agent matched eingehende Anfragen automatisch auf diese Preise.
+# ============================================================
+
+# Standard-Stundensatz (Fallback fuer nicht gelistete Arbeiten)
+hourly_rate: 55.00
+
+# Materialaufschlag (z.B. 1.15 = 15% auf Materialpreis)
+materials_markup: 1.15
+
+# Standard-Services mit festen Preisen
+# format: beschreibung, price, unit (h=Stunde, qm=Quadratmeter, Stk=Stueck, m=Meter, pauschal=Pauschale)
+standard_services:
+  # ── Arbeit / Stunden ──
+  - description: "Arbeitsstunde (Standard)"
+    price: 55.00
+    unit: "h"
+  - description: "Arbeitsstunde (Samstag)"
+    price: 75.00
+    unit: "h"
+  - description: "Notdienst / Soforteinsatz"
+    price: 95.00
+    unit: "h"
+
+  # ── Anfahrt / Pauschalen ──
+  - description: "Anfahrt pauschal (Stadtgebiet)"
+    price: 35.00
+    unit: "pauschal"
+  - description: "Anfahrt pauschal (Umland)"
+    price: 50.00
+    unit: "pauschal"
+  - description: "Kleinmaterialpauschale"
+    price: 25.00
+    unit: "pauschal"
+
+  # ── Beispiel: Elektriker ──
+  - description: "Elektro-Installation je Steckdose"
+    price: 25.00
+    unit: "Stk"
+  - description: "Elektro-Installation je Lichtschalter"
+    price: 20.00
+    unit: "Stk"
+  - description: "Sicherungsautomat wechseln"
+    price: 45.00
+    unit: "Stk"
+  - description: "Leitung verlegen pro Meter"
+    price: 12.00
+    unit: "m"
+  - description: "Verteilerdose setzen"
+    price: 35.00
+    unit: "Stk"
+  - description: "FI-Schutzschalter (RCD) einbauen"
+    price: 85.00
+    unit: "Stk"
+
+  # ── Beispiel: Maler ──
+  - description: "Innenanstrich pro qm"
+    price: 8.50
+    unit: "qm"
+  - description: "Aussenanstrich pro qm"
+    price: 12.00
+    unit: "qm"
+  - description: "Tapete entfernen pro qm"
+    price: 5.00
+    unit: "qm"
+  - description: "Rauhfaser tapezieren pro qm"
+    price: 7.00
+    unit: "qm"
+  - description: "Spachtelarbeit pro qm"
+    price: 10.00
+    unit: "qm"
+
+  # ── Beispiel: Sanitaer / Heizung ──
+  - description: "Waschbecken montieren"
+    price: 95.00
+    unit: "Stk"
+  - description: "WC montieren"
+    price: 120.00
+    unit: "Stk"
+  - description: "Heizkorper montieren"
+    price: 85.00
+    unit: "Stk"
+  - description: "Warmwasserboiler austauschen"
+    price: 150.00
+    unit: "Stk"
+  - description: "Duschkabine montieren"
+    price: 180.00
+    unit: "Stk"
+
+  # ── Beispiel: Schreiner ──
+  - description: "Kuche montieren (IfK-zert.)"
+    price: 350.00
+    unit: "pauschal"
+  - description: "Einbaukuche pro laufendem Meter"
+    price: 85.00
+    unit: "m"
+  - description: "Turo einbauen (Zarge + Blatt)"
+    price: 120.00
+    unit: "Stk"
+  - description: "Fensterbank montieren"
+    price: 65.00
+    unit: "Stk"

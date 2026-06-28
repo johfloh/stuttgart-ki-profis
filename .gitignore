@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pyo
+agent-venv/
+venv/
+.env
+*.db
+backend/data/platform.db
+backend/platform/data/gateway/qr_codes/*
+!backend/platform/data/gateway/qr_codes/.gitkeep

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Stuttgart KI Profis</title>
+  <meta name="description" content="KI-Agentur für den Stuttgarter Mittelstand">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bgDark: '#0A0A0C',
+            surface: '#141417',
+            primary: '#00FFA3',
+            accent: '#3B82F6',
+            textMain: '#F3F4F6',
+            muted: '#82828C',
+            borderDark: '#27272A',
+          },
+          fontFamily: {
+            sans: ['Satoshi', 'Inter', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    ::selection {
+      background-color: #00FFA3;
+      color: #0A0A0C;
+    }
+    body {
+      background-color: #0A0A0C;
+      color: #F3F4F6;
+      -webkit-font-smoothing: antialiased;
+    }
+    input {
+      background-color: #0A0A0C !important;
+      border-radius: 0px !important;
+      border: none !important;
+      border-bottom: 1px solid #27272A !important;
+      color: #F3F4F6 !important;
+      outline: none !important;
+      transition: border-color 0.2s ease;
+    }
+    input:focus {
+      border-bottom: 1px solid #00FFA3 !important;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex items-center justify-center py-12 px-4">
+  <div class="w-full max-w-md mx-auto">
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-3 justify-center mb-8 select-none group">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" class="flex-shrink-0">
+        <polygon points="16,4 28,16 16,28 4,16" stroke="#00FFA3" stroke-width="2" fill="none"/>
+        <polygon points="16,10 22,16 16,22 10,16" stroke="#00FFA3" stroke-width="1" fill="#00FFA3" fill-opacity="0.2"/>
+      </svg>
+      <span class="text-xl font-display font-medium tracking-tight text-textMain group-hover:text-primary transition-colors">Stuttgart KI Profis</span>
+    </a>
+
+    <!-- Card -->
+    <div class="bg-surface rounded-none p-8 border border-borderDark">
+      <h1 class="text-2xl font-display font-semibold text-textMain mb-2 tracking-tight">Willkommen zurück</h1>
+      <p class="text-muted text-sm mb-6">Melde dich an, um dein Dashboard aufzurufen.</p>
+      
+      <div id="error-msg" class="hidden bg-red-950/40 border border-red-500 rounded-none p-3.5 text-sm text-red-200 mb-6 font-mono"></div>
+
+      <form id="login-form" class="space-y-6">
+        <div>
+          <label for="email" class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">E-Mail</label>
+          <input type="email" id="email" required class="w-full h-12 px-2 text-sm bg-transparent" placeholder="name@firma.de">
+        </div>
+        <div>
+          <label for="password" class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">Passwort</label>
+          <input type="password" id="password" required class="w-full h-12 px-2 text-sm bg-transparent" placeholder="Passwort">
+        </div>
+        <button type="submit" class="w-full h-12 bg-primary hover:bg-white text-bgDark font-display font-semibold text-sm rounded-none transition-colors flex items-center justify-center gap-2 mt-8">
+          <span id="btn-text">Einloggen</span>
+          <svg id="btn-spinner" class="hidden animate-spin w-5 h-5 text-bgDark inline text-center" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+        </button>
+      </form>
+      <p class="text-xs text-muted text-center mt-8 font-mono">Noch kein Konto? <a href="/register" class="text-primary hover:underline font-semibold">Hier registrieren</a></p>
+    </div>
+  </div>
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errEl = document.getElementById('error-msg');
+      errEl.classList.add('hidden');
+      const btnText = document.getElementById('btn-text');
+      const spinner = document.getElementById('btn-spinner');
+      btnText.textContent = 'Tritt ein...';
+      spinner.classList.remove('hidden');
+
+      try {
+        const resp = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: document.getElementById('email').value.trim(), password: document.getElementById('password').value }),
+        });
+        const data = await resp.json();
+        if (!resp.ok) {
+          errEl.textContent = data.error || 'Login fehlgeschlagen.';
+          errEl.classList.remove('hidden');
+          btnText.textContent = 'Einloggen';
+          spinner.classList.add('hidden');
+          return;
+        }
+        localStorage.setItem('hk_token', data.token);
+        localStorage.setItem('hk_user', JSON.stringify(data.user));
+        window.location.href = '/dashboard';
+      } catch (err) {
+        errEl.textContent = 'Verbindungsfehler. Bitte versuche es erneut.';
+        errEl.classList.remove('hidden');
+        btnText.textContent = 'Einloggen';
+        spinner.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>

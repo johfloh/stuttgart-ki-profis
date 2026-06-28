@@ -1,0 +1,81 @@
+hourly_rate: 55.0
+materials_markup: 1.15
+standard_services:
+- description: Arbeitsstunde (Standard)
+  price: 55.0
+  unit: h
+- description: Arbeitsstunde (Samstag)
+  price: 75.0
+  unit: h
+- description: Notdienst / Soforteinsatz
+  price: 95.0
+  unit: h
+- description: Anfahrt pauschal (Stadtgebiet)
+  price: 35.0
+  unit: pauschal
+- description: Anfahrt pauschal (Umland)
+  price: 50.0
+  unit: pauschal
+- description: Kleinmaterialpauschale
+  price: 25.0
+  unit: pauschal
+- description: Elektro-Installation je Steckdose
+  price: 25.0
+  unit: Stk
+- description: Elektro-Installation je Lichtschalter
+  price: 20.0
+  unit: Stk
+- description: Sicherungsautomat wechseln
+  price: 45.0
+  unit: Stk
+- description: Leitung verlegen pro Meter
+  price: 12.0
+  unit: m
+- description: Verteilerdose setzen
+  price: 35.0
+  unit: Stk
+- description: FI-Schutzschalter (RCD) einbauen
+  price: 85.0
+  unit: Stk
+- description: Innenanstrich pro qm
+  price: 8.5
+  unit: qm
+- description: Aussenanstrich pro qm
+  price: 12.0
+  unit: qm
+- description: Tapete entfernen pro qm
+  price: 5.0
+  unit: qm
+- description: Rauhfaser tapezieren pro qm
+  price: 7.0
+  unit: qm
+- description: Spachtelarbeit pro qm
+  price: 10.0
+  unit: qm
+- description: Waschbecken montieren
+  price: 95.0
+  unit: Stk
+- description: WC montieren
+  price: 120.0
+  unit: Stk
+- description: Heizkorper montieren
+  price: 85.0
+  unit: Stk
+- description: Warmwasserboiler austauschen
+  price: 150.0
+  unit: Stk
+- description: Duschkabine montieren
+  price: 180.0
+  unit: Stk
+- description: Kuche montieren (IfK-zert.)
+  price: 350.0
+  unit: pauschal
+- description: Einbaukuche pro laufendem Meter
+  price: 85.0
+  unit: m
+- description: Turo einbauen (Zarge + Blatt)
+  price: 120.0
+  unit: Stk
+- description: Fensterbank montieren
+  price: 65.0
+  unit: Stk

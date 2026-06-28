@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stuttgart KI Profis — Business Card</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0A0A0C;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .card-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    /* ===== CARD SHELL ===== */
+    .card {
+      width: 85mm;
+      height: 55mm;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+      border-radius: 0px !important;
+    }
+
+    .card-front {
+      background: #141417;
+      display: flex;
+      border: 1px solid #27272A;
+    }
+
+    .card-back {
+      background: #141417;
+      display: flex;
+      border: 1px solid #27272A;
+    }
+
+    /* ===== FRONT ===== */
+    .card-front .photo-panel {
+      width: 36%;
+      height: 100%;
+      background: linear-gradient(180deg, #0A0A0C 0%, #141417 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4mm 3mm;
+      position: relative;
+      flex-shrink: 0;
+      border-right: 1px solid #27272A;
+    }
+
+    .card-front .photo-ring {
+      width: 24mm;
+      height: 24mm;
+      overflow: hidden;
+      border: 2px solid #27272A;
+      flex-shrink: 0;
+    }
+
+    .card-front .photo-ring img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-front .photo-label {
+      color: #00FFA3;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.8mm;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 3mm;
+    }
+
+    /* Green accent bar at bottom of photo panel */
+    .card-front .photo-panel::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2mm;
+      background: #00FFA3;
+    }
+
+    .card-front .info-panel {
+      flex: 1;
+      padding: 4.5mm 4mm 4mm 4mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      background: #141417;
+    }
+
+    /* Subtle watermark */
+    .card-front .info-panel::before {
+      content: 'STR';
+      position: absolute;
+      right: 1.5mm;
+      bottom: 0.5mm;
+      font-size: 24px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      color: rgba(39, 39, 42, 0.4);
+      letter-spacing: -2px;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .card-front .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 2mm;
+      margin-bottom: 2mm;
+    }
+
+    .card-front .logo-icon {
+      width: 5.5mm;
+      height: 5.5mm;
+      flex-shrink: 0;
+    }
+
+    .card-front .logo-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3.8mm;
+      font-weight: 700;
+      color: #F3F4F6;
+      letter-spacing: -0.3px;
+    }
+
+    .card-front .divider-line {
+      width: 8mm;
+      height: 1.5px;
+      background: #00FFA3;
+      margin-bottom: 2mm;
+    }
+
+    .card-front .name-title {
+      margin-bottom: 2mm;
+    }
+
+    .card-front .name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 5.2mm;
+      font-weight: 700;
+      color: #F3F4F6;
+      line-height: 1.1;
+    }
+
+    .card-front .title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2.5mm;
+      font-weight: 500;
+      color: #00FFA3;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 0.3mm;
+    }
+
+    .card-front .tagline-line {
+      font-family: 'Inter', sans-serif;
+      font-size: 2.3mm;
+      color: #82828C;
+      line-height: 1.4;
+      font-weight: 300;
+      margin-bottom: 2.5mm;
+    }
+
+    .card-front .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.6mm;
+      margin-top: 1mm;
+    }
+
+    .card-front .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1.5mm;
+    }
+
+    .card-front .contact-item svg {
+      width: 2.3mm;
+      height: 2.3mm;
+      flex-shrink: 0;
+      color: #00FFA3;
+    }
+
+    .card-front .contact-item span {
+      font-family: 'Inter', sans-serif;
+      font-size: 2mm;
+      color: #82828C;
+      font-weight: 400;
+    }
+
+    /* ===== BACK ===== */
+    .card-back .back-brand {
+      width: 55%;
+      padding: 4.5mm 4mm 4mm 4mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .card-back .back-brand .brand-icon {
+      width: 6mm;
+      height: 6mm;
+      margin-bottom: 2mm;
+    }
+
+    .card-back .back-headline {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3.6mm;
+      font-weight: 700;
+      color: #00FFA3;
+      margin-bottom: 1.5mm;
+    }
+
+    .card-back .back-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 2.2mm;
+      color: #82828C;
+      line-height: 1.4;
+      font-weight: 300;
+      margin-bottom: 2.5mm;
+    }
+
+    .card-back .feature-list {
+      list-style: none;
+    }
+
+    .card-back .feature-list li {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2mm;
+      color: #B0B0B8;
+      margin-bottom: 0.7mm;
+      padding-left: 3mm;
+      position: relative;
+    }
+
+    .card-back .feature-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.5mm;
+      width: 1.2mm;
+      height: 1.2mm;
+      background: #00FFA3;
+    }
+
+    .card-back .qr-panel {
+      width: 45%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3.5mm;
+      background: rgba(10, 10, 12, 0.5);
+      border-left: 1px solid #27272A;
+    }
+
+    .card-back .qr-panel img {
+      width: 24mm;
+      height: 24mm;
+      display: block;
+    }
+
+    .card-back .qr-panel .qr-url {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.8mm;
+      color: #82828C;
+      margin-top: 1.5mm;
+      text-align: center;
+    }
+
+    .card-back .qr-panel .qr-url a {
+      color: #00FFA3;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* ===== PRINT ===== */
+    @page {
+      size: 85mm 55mm;
+      margin: 0;
+    }
+
+    @media print {
+      html, body {
+        background: #141417 !important;
+        padding: 0 !important;
+        min-height: auto !important;
+      }
+      .card-wrapper { gap: 0; }
+      .card {
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        page-break-after: always;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+      .card-front { border-radius: 0 !important; }
+      .card-back { border-radius: 0 !important; }
+      .no-print { display: none !important; }
+    }
+
+    /* ===== CONTROLS ===== */
+    .no-print {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .no-print .title-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #F3F4F6;
+      margin-bottom: 0.3rem;
+    }
+    .no-print .sub-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      color: #82828C;
+      margin-bottom: 1rem;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: 'JetBrains Mono', monospace;
+      padding: 0.7rem 1.5rem;
+      border: 1px solid #27272A;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      border-radius: 0px !important;
+    }
+
+    .btn-primary {
+      background: #00FFA3;
+      color: #0A0A0C;
+      border-color: #00FFA3;
+    }
+    .btn-primary:hover { background: #00E592; }
+
+    .btn-secondary {
+      background: transparent;
+      color: #F3F4F6;
+      border-color: #27272A;
+    }
+    .btn-secondary:hover { border-color: #00FFA3; color: #00FFA3; }
+
+    .no-print .hint {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      color: #82828C;
+      margin-top: 0.6rem;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="no-print">
+    <div class="title-text">Stuttgart KI Profis — Business Card</div>
+    <div class="sub-text">85 x 55 mm, doppelseitig. Passend zur Website.</div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="window.print()">Drucken / als PDF speichern</button>
+      <a href="photo.jpg" class="btn btn-secondary" download>Foto herunterladen</a>
+    </div>
+    <div class="hint">
+      Zum doppelseitigen Druck: Drucker auf &raquo;beidseitig / Duplex&laquo; stellen.<br>
+      Für PDF: Im Druckdialog &raquo;Als PDF speichern&laquo; wahlen. Seitenrand auf &raquo;Keine&laquo;.
+    </div>
+  </div>
+
+  <div class="card-wrapper">
+    <!-- ============ FRONT ============ -->
+    <div class="card card-front">
+      <!-- Photo panel -->
+      <div class="photo-panel">
+        <div class="photo-ring">
+          <img src="photo.jpg" alt="Johannes Flohe">
+        </div>
+        <div class="photo-label">Geschäftsführer</div>
+      </div>
+      <!-- Info panel -->
+      <div class="info-panel">
+        <div class="logo-row">
+          <svg class="logo-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="50" y="8" width="59.4" height="59.4" transform="rotate(45 50 8)" stroke="#00FFA3" stroke-width="12" />
+            <rect x="50" y="32" width="25.4" height="25.4" transform="rotate(45 50 32)" fill="#00FFA3" />
+          </svg>
+          <span class="logo-text">Stuttgart KI Profis</span>
+        </div>
+        <div class="divider-line"></div>
+        <div class="name-title">
+          <div class="name">Johannes Flohe</div>
+          <div class="title">Geschäftsführer</div>
+        </div>
+        <div class="tagline-line">KI-Automatisierung für den Stuttgarter Mittelstand.<br>Messbar in Wochen, nicht Monaten.</div>
+        <div class="contact-grid">
+          <div class="contact-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+            </svg>
+            <span>+49 176 96995345</span>
+          </div>
+          <div class="contact-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+            </svg>
+            <span>WhatsApp: +49 176 96995345</span>
+          </div>
+          <div class="contact-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M22 5l-10 7L2 5"/>
+            </svg>
+            <span>kontakt@stuttgart-ki-profis.de</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ BACK ============ -->
+    <div class="card card-back">
+      <div class="back-brand">
+        <svg class="brand-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="50" y="8" width="59.4" height="59.4" transform="rotate(45 50 8)" stroke="#00FFA3" stroke-width="12" />
+          <rect x="50" y="32" width="25.4" height="25.4" transform="rotate(45 50 32)" fill="#00FFA3" />
+        </svg>
+        <div class="back-headline">Automatisierung, die ankommt.</div>
+        <div class="back-sub">
+          Wir transformieren analoge Engpässe in digitale Effizienz. Schwäbische Präzision trifft auf KI.
+        </div>
+        <ul class="feature-list">
+          <li>Autonomer Kundensupport (24/7)</li>
+          <li>Dokumentenanalyse & OCR</li>
+          <li>Prozessautomatisierung (ERP/CRM)</li>
+          <li>DSGVO-konform, deutsche Server</li>
+          <li>Kostenlose Potenzialanalyse</li>
+        </ul>
+      </div>
+      <div class="qr-panel">
+        <img src="qr-code-card.svg" alt="QR Code zur Website">
+        <div class="qr-url">
+          <a href="http://85.215.163.241:5000/card" target="_blank">sap.to/card</a><br>
+          Scannen &rarr; direkt zum Kontakt
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

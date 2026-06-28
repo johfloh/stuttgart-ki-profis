@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrieren - Stuttgart KI Profis</title>
+  <meta name="description" content="KI-Agentur für den Stuttgarter Mittelstand">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bgDark: '#0A0A0C',
+            surface: '#141417',
+            primary: '#00FFA3',
+            accent: '#3B82F6',
+            textMain: '#F3F4F6',
+            muted: '#82828C',
+            borderDark: '#27272A',
+          },
+          fontFamily: {
+            sans: ['Satoshi', 'Inter', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    ::selection {
+      background-color: #00FFA3;
+      color: #0A0A0C;
+    }
+    body {
+      background-color: #0A0A0C;
+      color: #F3F4F6;
+      -webkit-font-smoothing: antialiased;
+    }
+    input {
+      background-color: #0A0A0C !important;
+      border-radius: 0px !important;
+      border: none !important;
+      border-bottom: 1px solid #27272A !important;
+      color: #F3F4F6 !important;
+      outline: none !important;
+      transition: border-color 0.2s ease;
+    }
+    input:focus {
+      border-bottom: 1px solid #00FFA3 !important;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex items-center justify-center py-12 px-4">
+  <div class="w-full max-w-md mx-auto">
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-3 justify-center mb-8 select-none group">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" class="flex-shrink-0">
+        <polygon points="16,4 28,16 16,28 4,16" stroke="#00FFA3" stroke-width="2" fill="none"/>
+        <polygon points="16,10 22,16 16,22 10,16" stroke="#00FFA3" stroke-width="1" fill="#00FFA3" fill-opacity="0.2"/>
+      </svg>
+      <span class="text-xl font-display font-medium tracking-tight text-textMain group-hover:text-primary transition-colors">Stuttgart KI Profis</span>
+    </a>
+
+    <!-- Card -->
+    <div class="bg-surface rounded-none p-8 border border-borderDark">
+      <h1 class="text-2xl font-display font-semibold text-textMain mb-2 tracking-tight">Konto erstellen</h1>
+      <p class="text-muted text-sm mb-6">Richte deinen B2B KI-Agenten für den Mittelstand ein.</p>
+
+      <div id="error-msg" class="hidden bg-red-950/40 border border-red-500 rounded-none p-3.5 text-sm text-red-200 mb-6 font-mono"></div>
+
+      <form id="register-form" class="space-y-6">
+        <div>
+          <label for="email" class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">E-Mail *</label>
+          <input type="email" id="email" name="email" required
+            placeholder="name@firma.de"
+            class="w-full h-12 px-2 text-sm bg-transparent">
+        </div>
+        <div>
+          <label for="password" class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">Passwort *</label>
+          <input type="password" id="password" name="password" required minlength="8"
+            placeholder="Mindestens 8 Zeichen"
+            class="w-full h-12 px-2 text-sm bg-transparent">
+          <p class="text-[11px] text-muted font-mono mt-1.5">Mindestens 8 Zeichen</p>
+        </div>
+        <button type="submit"
+          class="w-full h-12 bg-primary hover:bg-white text-bgDark font-display font-semibold text-sm rounded-none transition-colors flex items-center justify-center gap-2">
+          <span id="btn-text">Konto erstellen</span>
+          <svg id="btn-spinner" class="hidden animate-spin w-5 h-5 text-bgDark" viewBox="0 0 24 24" fill="none">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+          </svg>
+        </button>
+      </form>
+
+      <p class="text-xs text-muted text-center mt-8 font-mono">
+        Bereits registriert? <a href="/login" class="text-primary hover:underline font-semibold">Hier einloggen</a>
+      </p>
+      <p class="text-xs text-muted text-center mt-3 font-mono">
+        <a href="https://stuttgart-ki-profis.de" class="hover:text-textMain underline transition-colors">Zurück zur Startseite</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = window.location.origin;
+
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const errorEl = document.getElementById('error-msg');
+      const btnText = document.getElementById('btn-text');
+      const spinner = document.getElementById('btn-spinner');
+
+      errorEl.classList.add('hidden');
+
+      if (password.length < 8) {
+        errorEl.textContent = 'Das Passwort muss mindestens 8 Zeichen lang sein.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      btnText.textContent = 'Wird erstellt...';
+      spinner.classList.remove('hidden');
+
+      try {
+        const resp = await fetch(API_BASE + '/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+        const data = await resp.json();
+
+        if (!resp.ok) {
+          errorEl.textContent = data.error || 'Registrierung fehlgeschlagen.';
+          errorEl.classList.remove('hidden');
+          btnText.textContent = 'Konto erstellen';
+          spinner.classList.add('hidden');
+          return;
+        }
+
+        // Store token and redirect to onboarding
+        localStorage.setItem('hk_token', data.token);
+        localStorage.setItem('hk_user', JSON.stringify(data.user));
+        window.location.href = '/onboarding';
+      } catch (err) {
+        errorEl.textContent = 'Verbindungsfehler. Bitte versuche es erneut.';
+        errorEl.classList.remove('hidden');
+        btnText.textContent = 'Konto erstellen';
+        spinner.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>

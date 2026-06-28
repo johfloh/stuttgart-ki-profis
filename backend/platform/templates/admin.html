@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Stuttgart KI Profis</title>
+  <meta name="description" content="KI-Agentur für den Stuttgarter Mittelstand">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bgDark: '#0A0A0C',
+            surface: '#141417',
+            primary: '#00FFA3',
+            accent: '#3B82F6',
+            textMain: '#F3F4F6',
+            muted: '#82828C',
+            borderDark: '#27272A',
+          },
+          fontFamily: {
+            sans: ['Satoshi', 'Inter', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          maxWidth: { container: '1200px' }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::selection {
+      background-color: #00FFA3;
+      color: #0A0A0C;
+    }
+    body {
+      background-color: #0A0A0C;
+      color: #F3F4F6;
+      -webkit-font-smoothing: antialiased;
+    }
+    input {
+      background-color: #0A0A0C !important;
+      border-radius: 0px !important;
+      border: none !important;
+      border-bottom: 1px solid #27272A !important;
+      color: #F3F4F6 !important;
+      outline: none !important;
+      transition: border-color 0.2s ease;
+    }
+    input:focus {
+      border-bottom: 1px solid #00FFA3 !important;
+    }
+    .material-symbols-outlined {
+      font-size: 20px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased min-h-screen">
+  <!-- Nav -->
+  <header class="bg-surface border-b border-borderDark sticky top-0 z-40">
+    <nav class="max-w-container mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="/admin" class="flex items-center gap-3 select-none group">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" class="flex-shrink-0">
+          <polygon points="16,4 28,16 16,28 4,16" stroke="#00FFA3" stroke-width="2" fill="none"/>
+          <polygon points="16,10 22,16 16,22 10,16" stroke="#00FFA3" stroke-width="1" fill="#00FFA3" fill-opacity="0.2"/>
+        </svg>
+        <span class="text-base font-display font-medium tracking-tight text-textMain group-hover:text-primary transition-colors">Stuttgart KI Profis</span>
+        <span class="font-mono text-[10px] px-2 py-0.5 border border-primary/20 bg-primary/5 text-primary uppercase tracking-wider hidden sm:inline-block">Agency</span>
+      </a>
+      <div class="flex items-center gap-6">
+        <span id="status-badge" class="text-xs font-mono text-primary flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 bg-primary rounded-none inline-block"></span> CORE ACTIVE
+        </span>
+        <button onclick="logout()" class="text-xs font-mono text-muted hover:text-red-400 transition-colors uppercase tracking-wider">Abmelden</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="py-12">
+    <div class="max-w-container mx-auto px-4">
+
+      <!-- Login form (shown when not authenticated) -->
+      <div id="login-section" class="max-w-sm mx-auto py-16">
+        <div class="bg-surface border border-borderDark p-8 sm:p-10">
+          <h2 class="text-2xl font-display font-semibold text-textMain mb-2 tracking-tight">Agency Login</h2>
+          <p class="text-sm text-muted mb-8 leading-relaxed">Admin-Zugang für den Systembetreiber des Stuttgarter Backends.</p>
+          <div id="login-error" class="hidden bg-red-950/40 border border-red-500 p-4 text-xs font-mono text-red-200 mb-6"></div>
+          <div class="space-y-6">
+            <div>
+              <label class="block font-mono text-xs uppercase tracking-wider text-muted mb-2">Admin-Key</label>
+              <input type="password" id="admin-key" class="w-full h-12 px-2 text-sm bg-transparent" placeholder="Admin-Schlüssel eingeben">
+            </div>
+            <button onclick="adminLogin()" class="w-full h-12 bg-primary text-bgDark font-display font-semibold text-sm uppercase tracking-wider hover:bg-white transition-colors mt-8">Zugang autorisieren</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard (shown after login) -->
+      <div id="dashboard-section" class="hidden space-y-12">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between border-b border-borderDark pb-6 flex-wrap gap-4">
+          <div>
+            <h1 class="text-2xl sm:text-3xl font-display font-semibold text-textMain tracking-tight">Agency Dashboard</h1>
+            <p class="text-muted text-sm mt-1">Plattformweite Steuerung aller Docker- und Engine-Schnittstellen</p>
+          </div>
+          <button onclick="refreshData()" class="h-10 px-5 border border-borderDark text-textMain hover:border-primary hover:text-primary font-display font-semibold text-xs uppercase tracking-wider transition-colors flex items-center gap-2">
+            <span class="material-symbols-outlined">refresh</span>
+            Aktualisieren
+          </button>
+        </div>
+
+        <!-- Stats cards -->
+        <div id="stats-cards" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4"></div>
+
+        <!-- Customer table -->
+        <div class="bg-surface border border-borderDark">
+          <div class="p-6 border-b border-borderDark flex items-center justify-between flex-wrap gap-4 bg-[#0A0A0C]">
+            <h2 class="text-lg font-display font-semibold text-textMain tracking-tight">Systeminstanzen (Kunden)</h2>
+            <span id="customer-count" class="font-mono text-xs text-muted"></span>
+          </div>
+          <div id="table-container" class="overflow-x-auto">
+            <table class="w-full text-sm font-mono">
+              <thead>
+                <tr class="bg-[#0A0A0C] border-b border-borderDark text-left">
+                  <th class="px-6 py-4 font-semibold text-muted text-xs uppercase tracking-wider">// Kunde</th>
+                  <th class="px-6 py-4 font-semibold text-muted text-xs uppercase tracking-wider">// Besitzer</th>
+                  <th class="px-6 py-4 font-semibold text-muted text-xs uppercase tracking-wider">// WhatsApp</th>
+                  <th class="px-6 py-4 font-semibold text-muted text-xs uppercase tracking-wider">// Tarif</th>
+                  <th class="px-6 py-4 font-semibold text-muted text-xs uppercase tracking-wider">// Status</th>
+                  <th class="px-6 py-4 font-semibold text-muted text-xs uppercase tracking-wider">// Agent</th>
+                  <th class="px-6 py-4 font-semibold text-muted text-xs uppercase tracking-wider">// WhatsApp Link</th>
+                  <th class="px-6 py-4 font-semibold text-muted text-xs uppercase tracking-wider">// Seit</th>
+                </tr>
+              </thead>
+              <tbody id="customer-rows" class="divide-y divide-borderDark/60"></tbody>
+            </table>
+          </div>
+          <div id="empty-table" class="hidden p-16 text-center border-t border-borderDark">
+            <div class="w-12 h-12 bg-borderDark flex items-center justify-center mx-auto mb-4">
+              <span class="material-symbols-outlined text-muted text-2xl">table_chart</span>
+            </div>
+            <p class="text-muted font-mono text-xs uppercase tracking-wider">Noch keine Kunden registriert.</p>
+          </div>
+        </div>
+
+        <!-- Agent status legend -->
+        <div class="bg-surface border border-borderDark p-5 text-[11px] font-mono text-muted flex items-center flex-wrap gap-4">
+          <span class="font-bold text-textMain uppercase tracking-wider">// Legende:</span>
+          <span class="inline-flex items-center gap-1.5"><span class="w-1.5 h-1.5 bg-[#00FFA3] rounded-none"></span> Running</span>
+          <span class="inline-flex items-center gap-1.5"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-none"></span> Pending</span>
+          <span class="inline-flex items-center gap-1.5"><span class="w-1.5 h-1.5 bg-red-500 rounded-none"></span> Error</span>
+          <span class="inline-flex items-center gap-1.5"><span class="w-1.5 h-1.5 bg-[#00FFA3] rounded-none"></span> WhatsApp connected</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      'use strict';
+      const API_BASE = window.location.origin;
+      let adminKey = sessionStorage.getItem('hk_admin_key');
+      if (adminKey) { document.getElementById('login-section').classList.add('hidden'); document.getElementById('dashboard-section').classList.remove('hidden'); loadData(); }
+
+      window.adminLogin = function() {
+        const key = document.getElementById('admin-key').value.trim();
+        if (!key) { document.getElementById('login-error').textContent = 'Bitte Admin-Key eingeben.'; document.getElementById('login-error').classList.remove('hidden'); return; }
+        // Test the key
+        fetch(API_BASE + '/api/admin/stats', { headers: { 'X-Admin-Key': key } })
+          .then(r => { if (r.ok) { sessionStorage.setItem('hk_admin_key', key); adminKey = key; document.getElementById('login-section').classList.add('hidden'); document.getElementById('dashboard-section').classList.remove('hidden'); loadData(); } else { document.getElementById('login-error').textContent = 'Ungültiger Admin-Key.'; document.getElementById('login-error').classList.remove('hidden'); } })
+          .catch(() => { document.getElementById('login-error').textContent = 'Verbindungsfehler.'; document.getElementById('login-error').classList.remove('hidden'); });
+      };
+
+      window.logout = function() { sessionStorage.removeItem('hk_admin_key'); adminKey = null; document.getElementById('dashboard-section').classList.add('hidden'); document.getElementById('login-section').classList.remove('hidden'); };
+
+      window.refreshData = function() { loadData(); };
+
+      function statusBadge(s) { var m = { pending: ['text-yellow-400 border border-yellow-500/30 bg-yellow-500/5', 'PENDING'], provisioning: ['text-blue-400 border border-blue-500/30 bg-blue-500/5', 'PROVISIONING'], active: ['text-[#00FFA3] border border-[#00FFA3]/30 bg-[#00FFA3]/5', 'ACTIVE'], error: ['text-red-400 border border-red-500/30 bg-red-500/5', 'ERROR'], suspended: ['text-muted border border-borderDark bg-black/10', 'SUSPENDED'] }; var x = m[s] || ['text-muted border border-borderDark bg-black/10', s.toUpperCase()]; return '<span class="inline-flex items-center px-2 py-0.5 text-[11px] font-mono tracking-wider font-semibold ' + x[0] + '">' + x[1] + '</span>'; }
+
+      function instanceBadge(s) { var m = { pending: ['text-yellow-400 border border-yellow-500/30 bg-yellow-500/5', 'PENDING'], deploying: ['text-blue-400 border border-blue-500/30 bg-blue-500/5', 'DEPLOYING'], running: ['text-[#00FFA3] border border-[#00FFA3]/30 bg-[#00FFA3]/5', 'RUNNING'], stopped: ['text-muted border border-borderDark bg-black/10', 'STOPPED'], error: ['text-red-400 border border-red-500/30 bg-red-500/5', 'ERROR'] }; var x = m[s] || ['text-muted border border-borderDark bg-black/10', s ? s.toUpperCase() : '-']; return '<span class="inline-flex items-center px-2 py-0.5 text-[11px] font-mono tracking-wider font-semibold ' + x[0] + '">' + x[1] + '</span>'; }
+
+      function waBadge(v) { return v ? '<span class="inline-flex items-center gap-1.5 text-xs text-[#00FFA3] font-semibold uppercase tracking-wider"><span class="w-1.5 h-1.5 bg-[#00FFA3]"></span>ONLINE</span>' : '<span class="inline-flex items-center gap-1.5 text-muted font-semibold uppercase tracking-wider"><span class="w-1.5 h-1.5 bg-borderDark"></span>OFFLINE</span>'; }
+
+      function formatDate(d) { if (!d) return '-'; try { return new Date(d).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }); } catch(e) { return d; } }
+
+      function loadData() {
+        if (!adminKey) return;
+        Promise.all([
+          fetch(API_BASE + '/api/admin/stats', { headers: { 'X-Admin-Key': adminKey } }).then(r => r.json()),
+          fetch(API_BASE + '/api/admin/instances', { headers: { 'X-Admin-Key': adminKey } }).then(r => r.json()),
+        ]).then(function(responses) {
+          var stats = responses[0];
+          var instances = responses[1];
+
+          // Stats
+          var s = document.getElementById('stats-cards');
+          if (stats.ok) {
+            var st = stats.stats || {};
+            s.innerHTML =
+              '<div class="bg-surface border border-borderDark p-4 sm:p-5 font-mono"><p class="text-[10px] font-semibold text-muted uppercase tracking-wider mb-2">// Kunden</p><p class="text-3xl font-display font-bold text-textMain">' + (st.total_customers || 0) + '</p><p class="text-[10px] text-primary mt-1.5">' + (st.active_customers || 0) + ' AKTIV</p></div>' +
+              '<div class="bg-surface border border-borderDark p-4 sm:p-5 font-mono"><p class="text-[10px] font-semibold text-muted uppercase tracking-wider mb-2">// Agenten</p><p class="text-3xl font-display font-bold text-textMain">' + (st.running_instances || 0) + '</p><p class="text-[10px] text-primary mt-1.5">RUNNING</p></div>' +
+              '<div class="bg-surface border border-borderDark p-4 sm:p-5 font-mono"><p class="text-[10px] font-semibold text-muted uppercase tracking-wider mb-2">// WhatsApp</p><p class="text-3xl font-display font-bold text-textMain">' + (st.connected_whatsapp || 0) + '</p><p class="text-[10px] text-primary mt-1.5">CONNECTED</p></div>' +
+              '<div class="bg-surface border border-borderDark p-4 sm:p-5 font-mono"><p class="text-[10px] font-semibold text-muted uppercase tracking-wider mb-2">// User</p><p class="text-3xl font-display font-bold text-textMain">' + (st.total_users || 0) + '</p><p class="text-[10px] text-muted mt-1.5">REGISTRIERT</p></div>' +
+              '<div class="bg-surface border border-borderDark p-4 sm:p-5 font-mono"><p class="text-[10px] font-semibold text-muted uppercase tracking-wider mb-2">// Zahlungen</p><p class="text-3xl font-display font-bold text-textMain">' + (st.total_payments || 0) + '</p><p class="text-[10px] text-muted mt-1.5">GESAMT</p></div>' +
+              '<div class="bg-surface border border-borderDark p-4 sm:p-5 font-mono"><p class="text-[10px] font-semibold text-muted uppercase tracking-wider mb-2">// Umsatz</p><p class="text-3xl font-display font-bold text-[#00FFA3]">' + parseFloat(st.revenue || 0).toFixed(0) + '€</p><p class="text-[10px] text-[#00FFA3] mt-1.5">GESAMT</p></div>';
+          } else {
+            s.innerHTML = '<div class="col-span-full text-center py-8 text-red-400 font-mono">Fehler beim Laden der Statistiken</div>';
+          }
+
+          // Table
+          var rows = document.getElementById('customer-rows');
+          var count = document.getElementById('customer-count');
+          var empty = document.getElementById('empty-table');
+          var list = instances.instances || [];
+
+          if (list.length === 0) {
+            rows.innerHTML = '';
+            count.textContent = '0 Kunden registriert';
+            empty.classList.remove('hidden');
+          } else {
+            empty.classList.add('hidden');
+            count.textContent = '// ' + list.length + ' INSTANZEN GELADEN';
+            rows.innerHTML = list.map(function(c) {
+              return '<tr class="hover:bg-surface/40 transition-colors border-b border-borderDark/20">' +
+                '<td class="px-6 py-4"><div class="font-display font-semibold text-textMain text-sm">' + (c.company_name || '-') + '</div><div class="text-[11px] text-muted font-mono mt-0.5">' + (c.customer_id || '') + '</div></td>' +
+                '<td class="px-6 py-4 text-muted text-xs font-mono">' + (c.user_email || '-') + '</td>' +
+                '<td class="px-6 py-4 text-xs text-textMain font-mono font-semibold">' + (c.whatsapp_number || '-') + '</td>' +
+                '<td class="px-6 py-4 text-xs font-mono"><span class="font-bold text-textMain">' + (c.plan ? c.plan.toUpperCase() : '-') + '</span></td>' +
+                '<td class="px-6 py-4">' + statusBadge(c.status) + '</td>' +
+                '<td class="px-6 py-4">' + instanceBadge(c.instance_status) + '</td>' +
+                '<td class="px-6 py-4">' + waBadge(c.whatsapp_connected) + '</td>' +
+                '<td class="px-6 py-4 text-xs text-muted font-mono">' + formatDate(c.created_at) + '</td>' +
+                '</tr>';
+            }).join('');
+          }
+        }).catch(function(e) {
+          document.getElementById('stats-cards').innerHTML = '<div class="col-span-full text-center py-8 text-red-500 font-mono">Fehler: ' + e.message + '</div>';
+        });
+      }
+
+      // Auto-refresh every 30 seconds
+      if (adminKey) setInterval(loadData, 30000);
+
+      // Enter key triggers login
+      document.getElementById('admin-key').addEventListener('keydown', function(e) { if (e.key === 'Enter') window.adminLogin(); });
+    })();
+  </script>
+</body>
+</html>

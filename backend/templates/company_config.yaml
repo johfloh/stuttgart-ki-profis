@@ -1,0 +1,41 @@
+# ============================================================
+# Handwerker-KI Firmenkonfiguration
+# ============================================================
+# Pro Handwerker eine Datei. Wird vom Agent beim Erstellen
+# des Angebots verwendet.
+# ============================================================
+
+company:
+  name: "Ihr Firmenname e.K."
+  strasse: "Musterstrasse 12"
+  plz_ort: "70173 Stuttgart"
+  tel: "+49 711 12345678"
+  mail: "info@ihre-firma.de"
+  website: "https://www.ihre-firma.de"
+  steuer: "DE123456789"
+  geschaeftsfuehrer: "Max Mustermann"
+  ust_id: "DE123456789"
+
+# WhatsApp Business Nummer (fuer automatische Zuordnung)
+whatsapp:
+  number: "+491234567890"  # Wird bei Twilio eingerichtet
+
+# PDF-Design
+colors:
+  primary: [25, 60, 120]    # Dunkelblau - Ueberschriften, Header
+  secondary: [100, 100, 100] # Grau - Nebeninfos
+  accent: [200, 160, 40]     # Gold - Akzente (optional)
+
+# Logo (absoluter Pfad oder leer)
+logo_path: ""  # z.B. "/home/user/logo.png"
+
+# Voreinstellungen
+defaults:
+  zahlungsziel_tage: 14
+  gueltig_bis_tage: 30
+  angebot_betreff: "Angebot ueber Handwerksleistungen"
+
+# Optional: Auto-Reply Nachrichten (wenn der Handwerker seine eigenen Texte haben will)
+messages:
+  welcome: "Willkommen beim Angebotsassistenten! Senden Sie mir eine Sprachnachricht oder schreiben Sie mir, was der Kunde moechte. Ich erstelle daraus ein professionelles PDF-Angebot."
+  error: "Entschuldigung, ich konnte Ihre Anfrage nicht verarbeiten. Bitte versuchen Sie es noch einmal."
