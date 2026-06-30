@@ -102,6 +102,77 @@
             animation: pulse-subtle 2s infinite ease-in-out;
         }
 
+        /* Cookie banner — EU DSGVO konform */
+        #cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background: rgba(10, 10, 12, 0.97);
+            border-top: 1px solid #27272A;
+            backdrop-filter: blur(12px);
+            padding: 1rem 0;
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #cookie-banner.show {
+            transform: translateY(0);
+        }
+        #cookie-banner .inner {
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+        }
+        #cookie-banner p {
+            flex: 1 1 280px;
+            font-size: 0.8125rem;
+            line-height: 1.6;
+            color: #82828C;
+            margin: 0;
+        }
+        #cookie-banner p a {
+            color: #00FFA3;
+            text-decoration: underline;
+        }
+        #cookie-banner p a:hover {
+            color: #F3F4F6;
+        }
+        #cookie-btn-accept {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 0.625rem 1.5rem;
+            border: none;
+            background: #00FFA3;
+            color: #0A0A0C;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #cookie-btn-accept:hover {
+            background: #00E592;
+            box-shadow: 0 0 20px rgba(0, 255, 163, 0.5);
+        }
+        #cookie-btn-decline {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: 0.75rem;
+            padding: 0.625rem 1.5rem;
+            border: 1px solid #27272A;
+            background: transparent;
+            color: #82828C;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        #cookie-btn-decline:hover {
+            border-color: #F3F4F6;
+            color: #F3F4F6;
+        }
+
         /* Flow dash connection simulation */
         @keyframes dash {
             to {
@@ -771,6 +842,54 @@
                 }, line.delay);
             });
         });
+    </script>
+
+    <!-- Cookie Banner -->
+    <div id="cookie-banner" role="dialog" aria-label="Cookie-Einstellungen">
+        <div class="inner">
+            <p>
+                Diese Website verwendet nur technisch notwendige Cookies, um die grundlegende Funktionalität zu gewährleisten. Keine Tracking- oder Analyse-Cookies.
+                <a href="#" onclick="toggleModal('datenschutz-modal'); return false;">Mehr erfahren</a>
+            </p>
+            <div style="display: flex; gap: 0.5rem; flex-shrink: 0;">
+                <button id="cookie-btn-decline">Nur notwendige</button>
+                <button id="cookie-btn-accept">Verstanden</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cookie Banner Logic
+        (function() {
+            var banner = document.getElementById('cookie-banner');
+            var acceptBtn = document.getElementById('cookie-btn-accept');
+            var declineBtn = document.getElementById('cookie-btn-decline');
+
+            function setCookiePref(value) {
+                try {
+                    localStorage.setItem('cookie_consent', value);
+                } catch(e) {
+                    // fallback if localStorage is blocked
+                    document.cookie = 'cookie_consent=' + value + '; path=/; max-age=31536000';
+                }
+                banner.classList.remove('show');
+                setTimeout(function() { banner.style.display = 'none'; }, 500);
+            }
+
+            try {
+                var pref = localStorage.getItem('cookie_consent');
+                if (!pref) {
+                    // no preference saved — show banner
+                    setTimeout(function() { banner.classList.add('show'); }, 800);
+                }
+            } catch(e) {
+                // localStorage unavailable — show banner
+                setTimeout(function() { banner.classList.add('show'); }, 800);
+            }
+
+            acceptBtn.addEventListener('click', function() { setCookiePref('accepted'); });
+            declineBtn.addEventListener('click', function() { setCookiePref('declined'); });
+        })();
     </script>
 </body>
 </html>
