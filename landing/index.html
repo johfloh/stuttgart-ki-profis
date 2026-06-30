@@ -187,6 +187,69 @@
             stroke-dasharray: 8 12;
             animation: dash 5s linear infinite;
         }
+
+        /* --- About Section --- */
+        #about .photo-frame {
+            position: relative;
+        }
+        #about .photo-frame::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 0.75rem;
+            background: linear-gradient(135deg, #00FFA3 0%, #3B82F6 50%, #00FFA3 100%);
+            background-size: 200% 200%;
+            animation: shimmer 4s ease-in-out infinite;
+            z-index: 0;
+        }
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        #about .photo-inner {
+            position: relative;
+            z-index: 1;
+            margin: 2px;
+            border-radius: 0.625rem;
+            overflow: hidden;
+        }
+        #about .photo-inner img {
+            transition: filter 0.6s ease, transform 0.6s ease;
+        }
+        #about .photo-inner:hover img {
+            filter: grayscale(0%) !important;
+            transform: scale(1.02);
+        }
+        #about .photo-caption {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            background: rgba(10, 10, 12, 0.92);
+            border: 1px solid #27272A;
+            padding: 0.75rem 1rem;
+            backdrop-filter: blur(8px);
+            z-index: 2;
+        }
+        #about .timeline-line {
+            position: absolute;
+            left: 7px;
+            top: 0.5rem;
+            bottom: 0.5rem;
+            width: 2px;
+            background: #27272A;
+        }
+        #about .timeline-dot {
+            width: 0.75rem;
+            height: 0.75rem;
+            border: 2px solid #27272A;
+            background: #0A0A0C;
+            flex-shrink: 0;
+        }
+        #about .timeline-dot.active {
+            border-color: #00FFA3;
+            background: #00FFA3;
+        }
     </style>
 </head>
 <body class="bg-bg text-text-main font-sans min-h-screen overflow-x-hidden relative selection:bg-primary selection:text-bg">
@@ -211,6 +274,7 @@
             <!-- Desktop Navigation links -->
             <div class="hidden md:flex items-center space-x-8 font-mono text-xs tracking-wider">
                 <a href="#leistungen" class="text-muted hover:text-primary transition-colors">LEISTUNGEN</a>
+                <a href="#about" class="text-muted hover:text-primary transition-colors">UBER MICH</a>
                 <a href="#prozess" class="text-muted hover:text-primary transition-colors">PROZESS</a>
                 <a href="#kontakt" class="text-muted hover:text-primary transition-colors">KONTAKT</a>
             </div>
@@ -231,6 +295,7 @@
         <!-- Mobile Drawer menu -->
         <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 w-full bg-bg border-b border-border py-6 px-6 flex flex-col space-y-4 font-mono text-xs tracking-wider">
             <a href="#leistungen" class="text-muted hover:text-primary transition-colors py-2 block border-b border-border/40" onclick="toggleMobileMenu()">LEISTUNGEN</a>
+            <a href="#about" class="text-muted hover:text-primary transition-colors py-2 block border-b border-border/40" onclick="toggleMobileMenu()">UBER MICH</a>
             <a href="#prozess" class="text-muted hover:text-primary transition-colors py-2 block border-b border-border/40" onclick="toggleMobileMenu()">PROZESS</a>
             <a href="#kontakt" class="text-muted hover:text-primary transition-colors py-2 block border-b border-border/40" onclick="toggleMobileMenu()">KONTAKT</a>
             <a href="#kontakt" class="border border-border py-3 text-center text-text-main hover:border-primary hover:text-primary transition-all duration-300 block" onclick="toggleMobileMenu()">
@@ -518,7 +583,145 @@
         </div>
     </section>
 
-    <!-- 5. PROCESS SECTION -->
+    <!-- 4.5 UBER MICH SECTION -->
+    <section id="about" class="py-24 border-t border-border bg-[#0C0C0F] relative overflow-hidden">
+        <div class="absolute inset-x-0 top-0 h-[400px] radial-glow-blue opacity-30 pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="mb-16">
+                <span class="font-mono text-primary text-xs uppercase tracking-widest">[ABOUT / $WHOAMI]</span>
+                <h2 class="font-space text-3xl md:text-5xl font-bold mt-2">Ingenieur. Stuttgarter. KI-Entwickler.</h2>
+            </div>
+
+            <!-- Two-column layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+                <!-- Left: Photo -->
+                <div class="lg:col-span-5 photo-frame">
+                    <div class="photo-inner">
+                        <img src="assets/johannes.jpg" alt="Johannes Flohe — Gründer Stuttgart KI Profis" class="w-full h-auto grayscale" style="filter: grayscale(100%);">
+                        <div class="photo-caption text-left">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-1.5 h-1.5 bg-primary rounded-full pulse-dot"></span>
+                                <span class="font-mono text-[10px] text-primary uppercase tracking-widest">SYSTEM ONLINE</span>
+                            </div>
+                            <p class="font-space font-bold text-text-main text-sm mt-1">Johannes Flohe</p>
+                            <p class="font-mono text-[10px] text-muted">Gründer // Simulation Engineer @ Bosch eBike</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Story -->
+                <div class="lg:col-span-7 space-y-6">
+                    <!-- Status badge -->
+                    <div class="inline-flex items-center space-x-2 border border-border bg-surface px-3 py-1">
+                        <span class="w-1.5 h-1.5 bg-accent rounded-full pulse-dot"></span>
+                        <span class="font-mono text-[10px] text-muted uppercase tracking-wider">Standort: Stuttgart-Mitte</span>
+                    </div>
+
+                    <h3 class="font-space text-2xl md:text-3xl font-bold text-text-main leading-tight">
+                        Von der <span class="text-primary">Luft- und Raumfahrttechnik</span> zur KI-Transformation des Mittelstands.
+                    </h3>
+
+                    <div class="space-y-4 text-muted text-sm md:text-base font-light leading-relaxed">
+                        <p>
+                            Künstliche Intelligenz ist keine Zauberei. Sie ist Systemtechnik. Als 
+                            <strong class="text-text-main">ausgebildeter Luft- und Raumfahrtingenieur (M.Sc., Universität Stuttgart)</strong> 
+                            weiss ich: Komplexe Systeme zuverlässig zu beherrschen, ist eine Frage der Struktur, nicht des Bauchgefühls.
+                        </p>
+                        <p>
+                            Genau das tue ich täglich bei <strong class="text-text-main">Bosch eBike Systems</strong> — 
+                            thermische Simulation von Batteriemodulen mittels CFD, Python und Matlab. 
+                            Präzision auf Systemebene, Qualität nach ISO-Standards, Skalierung für Tausende von Produkten.
+                        </p>
+                        <p>
+                            Diese Denkweise bringe ich in jedes KI-Projekt ein. Keine Blackbox, kein Hype. 
+                            Sondern engineering-grade Automatisierung, die Ihre Prozesse strukturiert, 
+                            messbar macht und skaliert. Ob Angebot in Sekunden oder vollautomatisierte 
+                            Workflows — ich baue Systeme, die halten.
+                        </p>
+                    </div>
+
+                    <!-- Engineering creds -->
+                    <div class="grid grid-cols-2 gap-4 pt-2">
+                        <div class="border border-border bg-surface p-4">
+                            <div class="font-space font-bold text-text-main text-lg">M.Sc.</div>
+                            <p class="font-mono text-[10px] text-muted mt-1">Luft- und Raumfahrttechnik // Uni Stuttgart (1.9)</p>
+                        </div>
+                        <div class="border border-border bg-surface p-4">
+                            <div class="font-space font-bold text-text-main text-lg">Bosch</div>
+                            <p class="font-mono text-[10px] text-muted mt-1">Simulation Engineer // eBike Systems</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline + CTA row -->
+            <div class="mt-24 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+                <!-- Timeline -->
+                <div class="lg:col-span-7">
+                    <h4 class="font-mono text-xs text-primary uppercase tracking-widest mb-8">// WEG ZUR GRUENDUNG</h4>
+                    <div class="relative pl-8">
+                        <div class="timeline-line"></div>
+
+                        <!-- Item 1 -->
+                        <div class="relative mb-10 group">
+                            <div class="absolute -left-[22px] top-0.5 timeline-dot active group-hover:scale-110 transition-transform"></div>
+                            <span class="font-mono text-[10px] text-primary/80">Heute</span>
+                            <h5 class="font-space font-bold text-text-main text-lg mt-1">Stuttgart KI Profis</h5>
+                            <p class="text-muted text-sm font-light mt-1">Aufbau massgeschneiderter KI-Agenten fur Handwerk und Mittelstand. Erster Testkunde in Produktion.</p>
+                        </div>
+
+                        <!-- Item 2 -->
+                        <div class="relative mb-10 group">
+                            <div class="absolute -left-[22px] top-0.5 timeline-dot group-hover:border-primary group-hover:scale-110 transition-all"></div>
+                            <span class="font-mono text-[10px] text-muted">Seit 2022</span>
+                            <h5 class="font-space font-bold text-text-main text-lg mt-1">Bosch eBike Systems</h5>
+                            <p class="text-muted text-sm font-light mt-1">Thermisches Design von Batteriemodulen. CFD-Simulation, Python-basierte Auswertung, Qualitätssicherung fur Serienproduktion.</p>
+                        </div>
+
+                        <!-- Item 3 -->
+                        <div class="relative group">
+                            <div class="absolute -left-[22px] top-0.5 timeline-dot group-hover:border-primary group-hover:scale-110 transition-all"></div>
+                            <span class="font-mono text-[10px] text-muted">M.Sc. 2019</span>
+                            <h5 class="font-space font-bold text-text-main text-lg mt-1">Universitat Stuttgart</h5>
+                            <p class="text-muted text-sm font-light mt-1">Master Luft- und Raumfahrttechnik mit Auszeichnung (1.9). Fokus auf Systemdynamik, Stromungsmechanik und numerische Simulation.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA Card -->
+                <div class="lg:col-span-5 lg:sticky lg:top-32 h-fit">
+                    <div class="border border-border bg-surface p-8 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 border-l border-b border-border bg-bg px-3 py-1 font-mono text-[9px] text-primary">
+                            CONTACT
+                        </div>
+
+                        <h3 class="font-space font-bold text-lg mb-4">Persönlich kennenlernen</h3>
+                        <p class="text-muted text-sm font-light leading-relaxed mb-6">
+                            Lassen Sie uns unverbindlich sprechen. Ich zeige Ihnen, wo KI in Ihrem Betrieb echten Mehrwert schafft — ohne Verkaufsdruck, mit engineering-honestem Feedback.
+                        </p>
+
+                        <div class="space-y-4">
+                            <a href="#kontakt" class="glow-cta bg-primary text-bg font-space font-bold text-center px-6 py-3.5 text-sm hover:bg-[#00E592] block transition-all">
+                                Kostenlose Erstberatung
+                            </a>
+                            <div class="text-center">
+                                <span class="font-mono text-[10px] text-muted">oder direkt: </span>
+                                <a href="mailto:johannes@stuttgart-ki-profis.de" class="font-mono text-xs text-primary hover:text-text-main transition-colors">johannes@stuttgart-ki-profis.de</a>
+                            </div>
+                        </div>
+
+                        <!-- mini-badge -->
+                        <div class="mt-6 pt-5 border-t border-border/40 flex items-center space-x-3 text-[11px] font-mono text-muted">
+                            <span class="w-1.5 h-1.5 rounded-full bg-primary pulse-dot"></span>
+                            <span>Persönliche Betreuung // Vor-Ort in Stuttgart</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <section id="prozess" class="py-24 border-t border-border bg-bg relative overflow-hidden">
         <!-- Subtle radial glow behind process timeline structure -->
         <div class="absolute right-0 top-1/4 w-[500px] h-[500px] radial-glow-blue opacity-30 pointer-events-none"></div>
