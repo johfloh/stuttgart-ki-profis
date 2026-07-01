@@ -8,3 +8,4 @@ venv/
 backend/data/platform.db
 backend/platform/data/gateway/qr_codes/*
 !backend/platform/data/gateway/qr_codes/.gitkeep
+.DS_Store\n._*

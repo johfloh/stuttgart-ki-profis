@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stuttgart KI Profis — KI-Angebote in Minuten & Beratung für den Mittelstand</title>
+    <title>Über mich - Johannes Flohe | Stuttgart KI Profis</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" href="favicon-32x32.png">
-    <!-- Google Fonts -->
+    <!- Google Fonts ->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <!-- Material Symbols Outlined -->
+    <!- Material Symbols Outlined ->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <!-- Tailwind CSS CDN -->
+    <!- Tailwind CSS CDN ->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -188,7 +188,7 @@
             animation: dash 5s linear infinite;
         }
 
-        /* --- About Section --- */
+        /* -- About Section -- */
         #about .photo-frame {
             position: relative;
         }
@@ -254,13 +254,13 @@
 </head>
 <body class="bg-bg text-text-main font-sans min-h-screen overflow-x-hidden relative selection:bg-primary selection:text-bg">
 
-    <!-- Ambient Hero Glow Layer -->
+    <!- Ambient Hero Glow Layer ->
     <div class="absolute inset-0 radial-glow-hero pointer-events-none z-0"></div>
 
-    <!-- 1. NAVBAR -->
+    <!- 1. NAVBAR ->
     <nav class="fixed top-0 left-0 w-full z-50 bg-bg/85 backdrop-blur-md border-b border-border transition-all duration-300">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <!-- Logo -->
+            <!- Logo ->
             <a href="/" class="flex items-center space-x-3 group">
                 <svg class="w-6 h-6 text-primary transition-transform duration-500 group-hover:rotate-90" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="50" y="8" width="59.4" height="59.4" transform="rotate(45 50 8)" stroke="currentColor" stroke-width="12" />
@@ -271,32 +271,30 @@
                 </span>
             </a>
 
-            <!-- Desktop Navigation links -->
+            <!- Desktop Navigation links ->
             <div class="hidden md:flex items-center space-x-8 font-mono text-xs tracking-wider">
                 <a href="/angebotsassistent.html" class="text-muted hover:text-primary transition-colors">ANGEBOTSASSISTENT</a>
-                <a href="/beratung.html" class="text-muted hover:text-primary transition-colors">BERATUNG</a>
                 <a href="/about.html" class="text-muted hover:text-primary transition-colors">UBER MICH</a>
                 <a href="/#prozess" class="text-muted hover:text-primary transition-colors">PROZESS</a>
                 <a href="/beratung.html#kontakt" class="text-muted hover:text-primary transition-colors">KONTAKT</a>
             </div>
 
-            <!-- Desktop Brand Action -->
+            <!- Desktop Brand Action ->
             <div class="hidden md:block">
                 <a href="/beratung.html#kontakt" class="font-mono text-xs border border-border px-6 py-2.5 text-text-main hover:border-primary hover:text-primary transition-all duration-300">
                     Termin buchen
                 </a>
             </div>
 
-            <!-- Mobile responsive Menu Toggle -->
+            <!- Mobile responsive Menu Toggle ->
             <button id="mobile-menu-btn" class="md:hidden flex items-center justify-center p-2 text-text-main hover:text-primary focus:outline-none" aria-label="Menu">
                 <span class="material-symbols-outlined text-2xl" id="menu-icon">menu</span>
             </button>
         </div>
 
-        <!-- Mobile Drawer menu -->
+        <!- Mobile Drawer menu ->
         <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 w-full bg-bg border-b border-border py-6 px-6 flex flex-col space-y-4 font-mono text-xs tracking-wider">
             <a href="/angebotsassistent.html" class="text-muted hover:text-primary transition-colors py-2 block border-b border-border/40" onclick="toggleMobileMenu()">ANGEBOTSASSISTENT</a>
-            <a href="/beratung.html" class="text-muted hover:text-primary transition-colors py-2 block border-b border-border/40" onclick="toggleMobileMenu()">BERATUNG</a>
             <a href="/about.html" class="text-muted hover:text-primary transition-colors py-2 block border-b border-border/40" onclick="toggleMobileMenu()">UBER MICH</a>
             <a href="/#prozess" class="text-muted hover:text-primary transition-colors py-2 block border-b border-border/40" onclick="toggleMobileMenu()">PROZESS</a>
             <a href="/beratung.html#kontakt" class="text-muted hover:text-primary transition-colors py-2 block border-b border-border/40" onclick="toggleMobileMenu()">KONTAKT</a>
@@ -306,165 +304,165 @@
         </div>
     </nav>
 
-    <!-- 2. COMPRESSED HERO + ROUTING -->
-    <section id="hero" class="min-h-[90vh] flex items-center pt-28 pb-16 relative z-10 px-6 max-w-7xl mx-auto">
-        <div class="w-full">
-            <div class="max-w-3xl mx-auto text-center mb-16">
-                <div class="inline-flex items-center space-x-2 border border-border bg-surface px-3 py-1 text-xs font-mono text-muted w-fit mx-auto mb-6">
-                    <span class="w-1.5 h-1.5 bg-primary rounded-full pulse-dot"></span>
-                    <span>System Online // STR-01</span>
+    <!- 2. HERO SECTION ->
+
+    <section id="hero" class="min-h-screen flex items-center pt-28 pb-16 relative z-10 px-6 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center w-full">
+            <div class="lg:col-span-5 photo-frame">
+                <div class="photo-inner">
+                    <img src="assets/johannes.jpg" alt="Johannes Flohe" class="w-full h-auto">
+                    <div class="photo-caption text-left">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-1.5 h-1.5 bg-primary rounded-full pulse-dot"></span>
+                            <span class="font-mono text-[10px] text-primary uppercase tracking-widest">SYSTEM ONLINE</span>
+                        </div>
+                        <p class="font-space font-bold text-text-main text-sm mt-1">Johannes Flohe</p>
+                        <p class="font-mono text-[10px] text-muted">Gründer</p>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:col-span-7 space-y-6">
+                <div class="inline-flex items-center space-x-2 border border-border bg-surface px-3 py-1">
+                    <span class="w-1.5 h-1.5 bg-accent rounded-full pulse-dot"></span>
+                    <span class="font-mono text-[10px] text-muted uppercase tracking-wider">Standort: Stuttgart-Mitte</span>
                 </div>
                 <h1 class="font-space text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-bold leading-[1.05] tracking-tight text-text-main">
-                    KI für den <span class="text-primary">Stuttgarter Mittelstand</span>.
+                    Ingenieur.<br><span class="text-primary">Stuttgarter.</span> KI-Entwickler.
                 </h1>
-                <p class="text-muted text-base sm:text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto mt-6">
-                    Zwei Wege, Ihr Unternehmen zu automatisieren: unser KI-Angebotsassistent für sofortige PDF-Angebote per WhatsApp, oder massgeschneiderte KI-Beratung für Ihre individuellen Prozesse.
+                <p class="text-muted text-base sm:text-lg font-light leading-relaxed max-w-2xl">
+                    Vom M.Sc. in Luft- und Raumfahrttechnik zur KI-Transformation des Mittelstands.
+                    Ich bin überzeugt: Die gleiche Präzision, die Flugzeuge sicher in der Luft halt,
+                    braucht es für zuverlassige KI-Systeme.
                 </p>
-            </div>
-
-            <!-- Routing cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <!-- SaaS Product -->
-                <div class="relative group border border-primary/40 bg-surface p-8 transition-all duration-300 hover:border-primary">
-                    <div class="absolute top-6 right-6 font-mono text-[10px] text-primary border border-primary/30 px-2 py-0.5">PRODUKT // SAAS</div>
-                    <div class="w-12 h-12 border border-primary/50 flex items-center justify-center mb-6 text-primary bg-bg/50">
-                        <span class="material-symbols-outlined text-2xl">smart_toy</span>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="border border-border bg-surface p-4">
+                        <div class="font-space font-bold text-text-main text-lg">M.Sc.</div>
+                        <p class="font-mono text-[10px] text-muted mt-1">Luft- und Raumfahrttechnik // Uni Stuttgart (1.9)</p>
                     </div>
-                    <h2 class="font-space font-bold text-2xl text-text-main">KI-Angebotsassistent</h2>
-                    <p class="font-mono text-xs text-accent mt-1 uppercase tracking-wider">Ab 19 EUR/Monat // Sofort einsatzbereit</p>
-                    <p class="text-muted text-sm font-light mt-4 leading-relaxed">
-                        WhatsApp-Sprachnachricht rein, PDF-Angebot raus. In Sekunden. Speziell für Handwerksbetriebe in Stuttgart und Umgebung.
-                    </p>
-                    <ul class="mt-6 space-y-2 font-mono text-xs text-muted/95">
-                        <li class="flex items-center space-x-2"><span class="text-primary">■</span><span>Sprachnachricht -> PDF in unter 2 Minuten</span></li>
-                        <li class="flex items-center space-x-2"><span class="text-primary">■</span><span>Ihre Preisliste wird exakt eingehalten</span></li>
-                        <li class="flex items-center space-x-2"><span class="text-primary">■</span><span>Einrichtung in 10 Minuten, keine IT-Kenntnisse</span></li>
-                    </ul>
-                    <a href="/angebotsassistent.html" class="mt-8 block glow-cta bg-primary text-bg font-space font-bold text-center px-6 py-3.5 text-sm hover:bg-[#00E592] transition-all">
-                        Mehr erfahren & starten
-                    </a>
                 </div>
-
-                <!-- Consulting -->
-                <div class="relative group border border-border bg-surface p-8 transition-all duration-300 hover:border-accent">
-                    <div class="absolute top-6 right-6 font-mono text-[10px] text-accent border border-accent/30 px-2 py-0.5">BERATUNG // HIGH-TICKET</div>
-                    <div class="w-12 h-12 border border-border flex items-center justify-center mb-6 text-accent group-hover:border-accent/50 transition-colors bg-bg/50">
-                        <span class="material-symbols-outlined text-2xl">engineering</span>
-                    </div>
-                    <h2 class="font-space font-bold text-2xl text-text-main">KI-Beratung & Prozessautomatisierung</h2>
-                    <p class="font-mono text-xs text-accent mt-1 uppercase tracking-wider">Ab 5.000 EUR // Massgeschneidert</p>
-                    <p class="text-muted text-sm font-light mt-4 leading-relaxed">
-                        Wir analysieren Ihre Abläufe vor Ort, identifizieren Automatisierungspotenziale und entwickeln massgeschneiderte KI-Agenten für Ihre spezifischen Prozesse.
-                    </p>
-                    <ul class="mt-6 space-y-2 font-mono text-xs text-muted/95">
-                        <li class="flex items-center space-x-2"><span class="text-accent">■</span><span>Potenzialanalyse & Prozess-Audit vor Ort</span></li>
-                        <li class="flex items-center space-x-2"><span class="text-accent">■</span><span>Custom KI-Agenten & Workflow-Automation</span></li>
-                        <li class="flex items-center space-x-2"><span class="text-accent">■</span><span>Integration in bestehende Systeme (ERP/CRM)</span></li>
-                    </ul>
-                    <a href="/beratung.html" class="mt-8 block border border-accent text-accent font-space font-bold text-center px-6 py-3.5 text-sm hover:bg-accent/10 transition-all">
-                        Kostenlose Erstberatung
-                    </a>
-                </div>
-            </div>
-
-            <!-- Quick links to subpages -->
-            <div class="flex flex-wrap justify-center gap-6 mt-16 font-mono text-xs text-muted">
-                <a href="/about.html" class="hover:text-primary transition-colors">Uber mich</a>
-                <span class="text-border">|</span>
-                <a href="/#prozess" class="hover:text-primary transition-colors">Prozess</a>
-                <span class="text-border">|</span>
-                <button onclick="toggleModal('impressum-modal')" class="hover:text-primary transition-colors">Impressum</button>
-                <span class="text-border">|</span>
-                <button onclick="toggleModal('datenschutz-modal')" class="hover:text-primary transition-colors">Datenschutz</button>
             </div>
         </div>
     </section>
 
-    <!-- 3. LOCAL IMPACT TEASER -->
-    <section class="py-20 border-t border-border bg-[#0C0C0F] relative overflow-hidden">
-        <div class="absolute inset-x-0 bottom-0 h-[200px] radial-glow-blue opacity-20 pointer-events-none"></div>
-        <div class="max-w-3xl mx-auto px-6 text-center relative z-10">
+    <section class="py-24 border-t border-border bg-bg relative overflow-hidden">
+        <div class="max-w-4xl mx-auto px-6 relative z-10">
+            <div class="mb-16">
+                <span class="font-mono text-primary text-xs uppercase tracking-widest">[01 / MOTIVATION]</span>
+                <h2 class="font-space text-3xl md:text-5xl font-bold mt-2">Warum ich KI mache</h2>
+            </div>
+            <div class="space-y-6 text-muted text-base font-light leading-relaxed max-w-3xl">
+                <p>Als Luft- und Raumfahrtingenieur habe ich gelernt: Komplexe Systeme zu beherrschen ist eine Frage der Struktur, nicht des Bauchgefuhls. Ein Triebwerk, ein Flugzeug, eine Batteriezelle - jedes technische System folgt messbaren Gesetzen.</p>
+                <p>Dasselbe gilt für KI. Wahrend der Markt von Hype und Blackbox-Versprechungen uberschwemmt wird, setze ich auf engineering-grade Methodik: Prozesse verstehen, Daten strukturieren, Lösungen bauen, die sich nachweisen lassen.</p>
+                <p>Mein Weg bei <strong class="text-text-main">Bosch eBike Systems</strong> hat das gepragt. Thermische Simulation von Batteriemodulen mittels CFD, Python und Matlab. Präzision auf Systemebene, Qualitat nach ISO-Standards, Skalierung für Tausende von Produkten. Genau diese Denkweise bringe ich in jedes KI-Projekt ein.</p>
+                <p>Stuttgart KI Profis ist entstanden, weil ich gesehen habe, wie viel Zeit Handwerker und Mittelstandler mit Burokratie verlieren. Wahrend junge Unternehmen KI nutzen, um effizienter zu werden, bleiben lokale Betriebe zuruck - nicht, weil sie nicht wollen, sondern weil ihnen der Zugang fehlt. Das andere ich.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 border-t border-border bg-[#0C0C0F] relative overflow-hidden">
+        <div class="max-w-4xl mx-auto px-6 relative z-10">
+            <div class="mb-16">
+                <span class="font-mono text-primary text-xs uppercase tracking-widest">[02 / WERDEGANG]</span>
+                <h2 class="font-space text-3xl md:text-5xl font-bold mt-2">Mein Weg</h2>
+            </div>
+            <div class="relative pl-8 max-w-2xl">
+                <div class="timeline-line"></div>
+                <div class="relative mb-12 group">
+                    <div class="absolute -left-[22px] top-0.5 timeline-dot active"></div>
+                    <span class="font-mono text-[10px] text-primary">Heute</span>
+                    <h3 class="font-space font-bold text-xl text-text-main mt-1">Stuttgart KI Profis</h3>
+                    <p class="text-muted text-sm font-light mt-1">Aufbau maßgeschneiderter KI-Agenten für Handwerk und Mittelstand. Erster Testkunde (Malerbetrieb) in Produktion. Fokus: WhatsApp-Angebotsassistent und individuelle Automatisierungslosungen.</p>
+                </div>
+                <div class="relative mb-12 group">
+                    <div class="absolute -left-[22px] top-0.5 timeline-dot"></div>
+                    <span class="font-mono text-[10px] text-muted">Seit 2022</span>
+                    <h3 class="font-space font-bold text-xl text-text-main mt-1">Bosch eBike Systems</h3>
+                    <p class="text-muted text-sm font-light mt-1">Thermisches Design von Batteriemodulen. CFD-Simulation, Python-basierte Auswertung, automatisierte Qualitatssicherung für Serienproduktion. Mitarbeit an der Elektromobilität von Morgen.</p>
+                </div>
+                <div class="relative mb-12 group">
+                    <div class="absolute -left-[22px] top-0.5 timeline-dot"></div>
+                    <span class="font-mono text-[10px] text-muted">2020-2022</span>
+                    <h3 class="font-space font-bold text-xl text-text-main mt-1">Wissenschaftlicher Mitarbeiter</h3>
+                    <p class="text-muted text-sm font-light mt-1">Universitat Stuttgart - Institut für Thermodynamik. Forschung zu numerischer Stromungssimulation und Wärmeübertragung. Erste Beruhrungspunkte mit Machine Learning in der Strömungsmechanik.</p>
+                </div>
+                <div class="relative group">
+                    <div class="absolute -left-[22px] top-0.5 timeline-dot"></div>
+                    <span class="font-mono text-[10px] text-muted">M.Sc. 2019</span>
+                    <h3 class="font-space font-bold text-xl text-text-main mt-1">Universitat Stuttgart</h3>
+                    <p class="text-muted text-sm font-light mt-1">Master Luft- und Raumfahrttechnik mit Auszeichnung (Note 1.9). Schwerpunkt: Systemdynamik, Strömungsmechanik und numerische Simulation. Abschlussarbeit bei Bosch.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 border-t border-border bg-bg relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="mb-16">
+                <span class="font-mono text-primary text-xs uppercase tracking-widest">[03 / SKILLS]</span>
+                <h2 class="font-space text-3xl md:text-5xl font-bold mt-2">Was ich mitbringe</h2>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="border border-border bg-surface p-6 text-center group hover:border-primary/40 transition-all">
+                    <span class="material-symbols-outlined text-3xl text-primary">code</span>
+                    <p class="font-space font-bold text-text-main text-sm mt-3">Python</p>
+                    <p class="font-mono text-[10px] text-muted mt-1">5+ Jahre</p>
+                </div>
+                <div class="border border-border bg-surface p-6 text-center group hover:border-primary/40 transition-all">
+                    <span class="material-symbols-outlined text-3xl text-primary">neurology</span>
+                    <p class="font-space font-bold text-text-main text-sm mt-3">LLM / AI Agents</p>
+                    <p class="font-mono text-[10px] text-muted mt-1">OpenRouter, RAG, Fine-Tuning</p>
+                </div>
+                <div class="border border-border bg-surface p-6 text-center group hover:border-primary/40 transition-all">
+                    <span class="material-symbols-outlined text-3xl text-primary">query_stats</span>
+                    <p class="font-space font-bold text-text-main text-sm mt-3">CFD / Simulation</p>
+                    <p class="font-mono text-[10px] text-muted mt-1">Numerische Strömungsmechanik</p>
+                </div>
+                <div class="border border-border bg-surface p-6 text-center group hover:border-primary/40 transition-all">
+                    <span class="material-symbols-outlined text-3xl text-primary">integration_instructions</span>
+                    <p class="font-space font-bold text-text-main text-sm mt-3">Systemintegration</p>
+                    <p class="font-mono text-[10px] text-muted mt-1">API, ERP, CRM</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 border-t border-border bg-[#0C0C0F] relative overflow-hidden">
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
             <span class="inline-flex items-center space-x-2 border border-accent/30 bg-accent/5 px-3 py-1 font-mono text-xs uppercase tracking-wider text-accent mb-6">
                 <span class="w-1.5 h-1.5 bg-accent rounded-full pulse-dot"></span>
                 <span>Standort: Stuttgart-Mitte</span>
             </span>
             <h2 class="font-space text-3xl md:text-5xl font-bold tracking-tight text-text-main">
-                Schwäbische Präzision trifft auf <span class="text-primary">künstliche Intelligenz</span>.
+                Warum Stuttgart?<br>Warum der Mittelstand?
             </h2>
             <p class="text-muted text-base md:text-lg font-light leading-relaxed mt-6 max-w-2xl mx-auto">
-                Keine Blackbox, kein Hype. Engineering-grade KI-Systeme, entwickelt von einem 
-                Luft- und Raumfahrtingenieur für den Stuttgarter Mittelstand. 100% DSGVO-konform, 
-                auf deutschen Servern, mit handfestem ROI.
+                Weil ich hier lebe. Weil ich die Unternehmen kenne, die diese Region stark machen. Und weil der Mittelstand das Ruckgrat unserer Wirtschaft ist - aber beim Thema KI oft allein gelassen wird. Ich biete keine Standardlosung von der Stange, sondern maßgeschneiderte Systeme, die ich vor Ort bei Ihnen einrichte.
             </p>
-            <div class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
-                <div class="border border-border bg-surface p-5"><div class="font-space font-bold text-text-main text-lg">M.Sc.</div><p class="font-mono text-[9px] text-muted mt-1">Luft- und Raumfahrttechnik</p></div>
-                <div class="border border-border bg-surface p-5"><div class="font-space font-bold text-text-main text-lg">Bosch</div><p class="font-mono text-[9px] text-muted mt-1">Simulation Engineer</p></div>
-                <div class="border border-border bg-surface p-5"><div class="font-space font-bold text-text-main text-lg">100%</div><p class="font-mono text-[9px] text-muted mt-1">DSGVO-konform</p></div>
-                <div class="border border-border bg-surface p-5"><div class="font-space font-bold text-text-main text-lg">Vor-Ort</div><p class="font-mono text-[9px] text-muted mt-1">In Stuttgart</p></div>
-            </div>
-            <div class="mt-8">
-                <a href="/about.html" class="font-mono text-xs text-primary hover:text-text-main transition-colors tracking-wider">
-                    Zur ganzen Geschichte &rarr;
-                </a>
-            </div>
         </div>
     </section>
 
-    <!-- 4. PROCESS TEASER -->
-    <section id="prozess" class="py-20 border-t border-border bg-bg relative overflow-hidden">
-        <div class="max-w-5xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-12">
-                <span class="font-mono text-primary text-xs uppercase tracking-widest">[PROZESS]</span>
-                <h2 class="font-space text-3xl md:text-4xl font-bold mt-2 text-text-main">So einfach geht's</h2>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="border border-border bg-surface p-6 text-center group hover:border-primary/40 transition-all">
-                    <div class="font-space text-4xl font-bold text-primary/20">01</div>
-                    <h3 class="font-space font-bold text-lg text-text-main mt-2">Erstgesprach</h3>
-                    <p class="text-muted text-sm font-light mt-2">Wir lernen uns kennen und identifizieren Ihren größten Hebel.</p>
+    <section class="py-24 border-t border-border bg-bg relative overflow-hidden">
+        <div class="absolute inset-x-0 top-0 h-[400px] radial-glow-green opacity-40 pointer-events-none"></div>
+        <div class="max-w-4xl mx-auto px-6 relative z-10">
+            <div class="border border-border bg-surface p-8 md:p-12 text-center">
+                <h2 class="font-space text-3xl md:text-5xl font-bold text-text-main">Lernen wir uns kennen</h2>
+                <p class="text-muted text-base font-light mt-4 max-w-xl mx-auto leading-relaxed">
+                    20 Minuten Telefon oder Video. Kein Verkaufsgesprach - ich hore zu, analysiere und gebe Ihnen ein ehrliches Feedback, ob und wo KI in Ihrem Unternehmen Mehrwert schafft.
+                </p>
+                <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="https://calendar.app.google/S5c5nSjqgNTcmisT9" target="_blank" class="glow-cta bg-primary text-bg font-space font-bold text-center px-8 py-4 text-base hover:bg-[#00E592]">
+                        Kostenlose Erstberatung
+                    </a>
+                    <a href="mailto:johannes@stuttgart-ki-profis.de" class="border border-border hover:border-primary text-text-main hover:text-primary transition-all duration-300 font-mono text-xs tracking-wider text-center px-8 py-4">
+                        johannes@stuttgart-ki-profis.de
+                    </a>
                 </div>
-                <div class="border border-border bg-surface p-6 text-center group hover:border-primary/40 transition-all">
-                    <div class="font-space text-4xl font-bold text-primary/20">02</div>
-                    <h3 class="font-space font-bold text-lg text-text-main mt-2">Konzept & Umsetzung</h3>
-                    <p class="text-muted text-sm font-light mt-2">Festpreis-Angebot in 48h. Danach bauen wir Ihr System.</p>
-                </div>
-                <div class="border border-border bg-surface p-6 text-center group hover:border-primary/40 transition-all">
-                    <div class="font-space text-4xl font-bold text-primary/20">03</div>
-                    <h3 class="font-space font-bold text-lg text-text-main mt-2">Livegang & Betreuung</h3>
-                    <p class="text-muted text-sm font-light mt-2">Test, Rollout und laufender Support. Wir bleiben dran.</p>
-                </div>
-            </div>
-            <div class="text-center mt-8">
-                <a href="/beratung.html" class="font-mono text-xs text-primary hover:text-text-main transition-colors tracking-wider">
-                    Detaillierten Ablauf ansehen &rarr;
-                </a>
             </div>
         </div>
     </section>
-
-    <!-- 5. FINAL CTA -->
-    <section class="py-20 border-t border-border bg-[#0C0C0F] relative overflow-hidden">
-        <div class="absolute inset-x-0 top-0 h-[300px] radial-glow-green opacity-30 pointer-events-none"></div>
-        <div class="max-w-3xl mx-auto px-6 text-center relative z-10">
-            <h2 class="font-space text-3xl md:text-5xl font-bold text-text-main">Bereit für den ersten Schritt?</h2>
-            <p class="text-muted text-base font-light mt-4 max-w-xl mx-auto leading-relaxed">
-                Ob Angebotsassistent oder massgeschneiderte Beratung -- wir finden den richtigen Ansatz für Ihr Unternehmen. Kostenlos, unverbindlich, ohne Verkaufsdruck.
-            </p>
-            <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="/angebotsassistent.html" class="glow-cta bg-primary text-bg font-space font-bold text-center px-8 py-4 text-base hover:bg-[#00E592] transition-all">
-                    Angebotsassistent testen
-                </a>
-                <a href="/beratung.html" class="border border-accent text-accent font-space font-bold text-center px-8 py-4 text-base hover:bg-accent/10 transition-all">
-                    Beratung anfragen
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- 7. FOOTER SYSTEM -->
     <footer class="py-12 border-t border-border bg-bg">
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-            <!-- Brand emblem logo -->
+            <!- Brand emblem logo ->
             <a href="#hero" class="flex items-center space-x-3">
                 <svg class="w-5 h-5 text-primary" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="50" y="8" width="59.4" height="59.4" transform="rotate(45 50 8)" stroke="currentColor" stroke-width="12" />
@@ -475,7 +473,7 @@
                 </span>
             </a>
 
-            <!-- System copyright / operational tags / legals -->
+            <!- System copyright / operational tags / legals ->
             <div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 font-mono text-xs text-muted">
                 <button onclick="toggleModal('impressum-modal')" class="hover:text-primary transition-colors">Impressum</button>
                 <button onclick="toggleModal('datenschutz-modal')" class="hover:text-primary transition-colors">Datenschutz</button>
@@ -485,8 +483,8 @@
         </div>
     </footer>
 
-    <!-- INTERACTIVE MOCK TERMINAL POPUPS (LEGAL INFRASTRUCTURE) -->
-    <!-- Impressum Modal frame -->
+    <!- INTERACTIVE MOCK TERMINAL POPUPS (LEGAL INFRASTRUCTURE) ->
+    <!- Impressum Modal frame ->
     <div id="impressum-modal" class="fixed inset-0 bg-bg/95 backdrop-blur-md z-50 flex items-center justify-center p-6 hidden">
         <div class="border border-border bg-surface p-6 md:p-8 max-w-2xl w-full font-mono text-xs md:text-sm max-h-[85vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-border pb-4 mb-6">
@@ -502,7 +500,7 @@
         </div>
     </div>
 
-    <!-- Datenschutz Modal frame -->
+    <!- Datenschutz Modal frame ->
     <div id="datenschutz-modal" class="fixed inset-0 bg-bg/95 backdrop-blur-md z-50 flex items-center justify-center p-6 hidden">
         <div class="border border-border bg-surface p-6 md:p-8 max-w-2xl w-full font-mono text-xs md:text-sm max-h-[85vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-border pb-4 mb-6">
@@ -520,7 +518,7 @@
         </div>
     </div>
 
-    <!-- MAIN CLIENT LOGIC AND SCRIPT INJECTION -->
+    <!- MAIN CLIENT LOGIC AND SCRIPT INJECTION ->
     <script>
         // Drawer Menu handling
         const mobileBtn = document.getElementById('mobile-menu-btn');
@@ -554,9 +552,71 @@
                 document.body.style.overflow = '';
             }
         }
+
+        // Vertical scroll progress bar dynamic indicator mapping
+        window.addEventListener('scroll', () => {
+            const timeline = document.getElementById('timeline-section');
+            const progressBar = document.getElementById('timeline-progress-bar');
+            if (timeline && progressBar) {
+                const rect = timeline.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                
+                // Calculate percentage of the section scrolled through the viewport
+                const totalHeight = rect.height;
+                const progressStartHeight = windowHeight * 0.7; // start track when 70% from top
+                const progressEndHeight = windowHeight * 0.3;   // stop when near 30% from top
+                
+                const relativeY = rect.top - progressStartHeight;
+                let percentage = (relativeY / -totalHeight) * 100;
+                percentage = Math.max(0, Math.min(100, percentage));
+                
+                progressBar.style.height = `${percentage}%`;
+            }
+        });
+
+        // Contact Terminal compiling submission simulator log
+        const contactForm = document.getElementById('contact-form');
+        const terminalLog = document.getElementById('terminal-log');
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // visually freeze input form controls during deployment log display
+            contactForm.classList.add('opacity-40');
+            const inputs = contactForm.querySelectorAll('input, textarea, button');
+            inputs.forEach(input => input.setAttribute('disabled', 'true'));
+
+            // clear log block and showcase
+            terminalLog.classList.remove('hidden');
+            terminalLog.innerHTML = '';
+
+            const logLines = [
+                { text: '> Ihre Nachricht wird übermittelt...', delay: 300, color: 'text-muted' },
+                { text: '> Verschlüsselte Übertragung (AES-256)...', delay: 700, color: 'text-muted' },
+                { text: '> Verbindung zu Stuttgart KI Profis hergestellt.', delay: 1100, color: 'text-primary' },
+                { text: '> Ihre Daten wurden erfolgreich übermittelt.', delay: 1500, color: 'text-primary' },
+                { text: '------------------------------', delay: 1800, color: 'text-border' },
+                { text: '>> Vielen Dank für Ihre Nachricht!', delay: 2100, color: 'text-text-main font-bold' },
+                { text: '>> Wir melden uns innerhalb von 24 Stunden bei Ihnen.', delay: 2400, color: 'text-text-main font-light' },
+            ];
+
+            logLines.forEach((line) => {
+                setTimeout(() => {
+                    const p = document.createElement('p');
+                    p.className = `${line.color} leading-relaxed`;
+                    p.textContent = line.text;
+                    terminalLog.appendChild(p);
+                    // scroll to bottom of parent section
+                    const section = document.getElementById('kontakt');
+                    if (section) {
+                        section.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                    }
+                }, line.delay);
+            });
+        });
     </script>
 
-    <!-- Cookie Banner -->
+    <!- Cookie Banner ->
     <div id="cookie-banner" role="dialog" aria-label="Cookie-Einstellungen">
         <div class="inner">
             <p>

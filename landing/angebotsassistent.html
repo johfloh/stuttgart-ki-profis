@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth bg-bg text-text-main">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KI-Angebotsassistent -- Sprachnachricht zu PDF | Stuttgart KI Profis</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" href="favicon-32x32.png">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Material Symbols Outlined -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bg: '#0A0A0C',
+                        surface: '#141417',
+                        primary: '#00FFA3',
+                        accent: '#3B82F6',
+                        'text-main': '#F3F4F6',
+                        muted: '#82828C',
+                        border: '#27272A',
+                    },
+                    fontFamily: {
+                        space: ['"Space Grotesk"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        /* Force strictly sharp engineered borders globally */
+        * {
+            border-radius: 0px !important;
+        }
+        
+        /* Custom scrollbar matching dark cyber aesthetic */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0A0A0C;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272A;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00FFA3;
+        }
+
+        /* Ambient glows using premium radial gradients */
+        .radial-glow-green {
+            background: radial-gradient(circle at center, rgba(0, 255, 163, 0.06) 0%, rgba(10, 10, 12, 0) 70%);
+        }
+        .radial-glow-blue {
+            background: radial-gradient(circle at center, rgba(59, 130, 246, 0.05) 0%, rgba(10, 10, 12, 0) 70%);
+        }
+        .radial-glow-hero {
+            background: radial-gradient(circle at 70% 30%, rgba(0, 255, 163, 0.05) 0%, rgba(59, 130, 246, 0.03) 40%, rgba(10, 10, 12, 0) 70%);
+        }
+
+        /* Specific CTA shadow rules matching Google Stitch spec */
+        .glow-cta {
+            box-shadow: 0 0 20px rgba(0, 255, 163, 0.5);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glow-cta:hover {
+            box-shadow: 0 0 30px rgba(0, 255, 163, 0.8);
+            transform: translateY(-1px);
+        }
+
+        /* Blinking cursor effect */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        /* Grid lines decoration background */
+        .bg-grid-cyber {
+            background-size: 32px 32px;
+            background-image: 
+                linear-gradient(to right, rgba(39, 39, 42, 0.25) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(39, 39, 42, 0.25) 1px, transparent 1px);
+        }
+
+        /* Ambient node pulse animation */
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+        .pulse-dot {
+            animation: pulse-subtle 2s infinite ease-in-out;
+        }
+
+        /* Cookie banner — EU DSGVO konform */
+        #cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background: rgba(10, 10, 12, 0.97);
+            border-top: 1px solid #27272A;
+            backdrop-filter: blur(12px);
+            padding: 1rem 0;
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #cookie-banner.show {
+            transform: translateY(0);
+        }
+        #cookie-banner .inner {
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+        }
+        #cookie-banner p {
+            flex: 1 1 280px;
+            font-size: 0.8125rem;
+            line-height: 1.6;
+            color: #82828C;
+            margin: 0;
+        }
+        #cookie-banner p a {
+            color: #00FFA3;
+            text-decoration: underline;
+        }
+        #cookie-banner p a:hover {
+            color: #F3F4F6;
+        }
+        #cookie-btn-accept {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 0.625rem 1.5rem;
+            border: none;
+            background: #00FFA3;
+            color: #0A0A0C;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #cookie-btn-accept:hover {
+            background: #00E592;
+            box-shadow: 0 0 20px rgba(0, 255, 163, 0.5);
+        }
+        #cookie-btn-decline {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: 0.75rem;
+            padding: 0.625rem 1.5rem;
+            border: 1px solid #27272A;
+            background: transparent;
+            color: #82828C;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        #cookie-btn-decline:hover {
+            border-color: #F3F4F6;
+            color: #F3F4F6;
+        }
+
+        /* Flow dash connection simulation */
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -40;
+            }
+        }
+        .animate-dash {
+            stroke-dasharray: 8 12;
+            animation: dash 5s linear infinite;
+        }
+
+        /* --- About Section --- */
+        #about .photo-frame {
+            position: relative;
+        }
+        #about .photo-frame::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 0.75rem;
+            background: linear-gradient(135deg, #00FFA3 0%, #3B82F6 50%, #00FFA3 100%);
+            background-size: 200% 200%;
+            animation: shimmer 4s ease-in-out infinite;
+            z-index: 0;
+        }
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        #about .photo-inner {
+            position: relative;
+            z-index: 1;
+            margin: 2px;
+            border-radius: 0.625rem;
+            overflow: hidden;
+        }
+        #about .photo-inner img {
+            transition: filter 0.6s ease, transform 0.6s ease;
+        }
+        #about .photo-inner:hover img {
+            filter: grayscale(0%) !important;
+            transform: scale(1.02);
+        }
+        #about .photo-caption {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            background: rgba(10, 10, 12, 0.92);
+            border: 1px solid #27272A;
+            padding: 0.75rem 1rem;
+            backdrop-filter: blur(8px);
+            z-index: 2;
+        }
+        #about .timeline-line {
+            position: absolute;
+            left: 7px;
+            top: 0.5rem;
+            bottom: 0.5rem;
+            width: 2px;
+            background: #27272A;
+        }
+        #about .timeline-dot {
+            width: 0.75rem;
+            height: 0.75rem;
+            border: 2px solid #27272A;
+            background: #0A0A0C;
+            flex-shrink: 0;
+        }
+        #about .timeline-dot.active {
+            border-color: #00FFA3;
+            background: #00FFA3;
+        }
+
+        /* Onboarding button selection states */
+        .onboarding-plan.selected,
+        #trade-selector button.selected {
+            border-color: #00FFA3 !important;
+            color: #F3F4F6 !important;
+            background: rgba(0, 255, 163, 0.08) !important;
+        }
+    </style>
+</head>
+<body class="bg-bg text-text-main font-sans min-h-screen overflow-x-hidden relative selection:bg-primary selection:text-bg">
+
+    <!-- Ambient Hero Glow Layer -->
+    <div class="absolute inset-0 radial-glow-hero pointer-events-none z-0"></div>
+
+    <!-- 1. NAVBAR -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-bg/85 backdrop-blur-md border-b border-border transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="/" class="flex items-center space-x-3 group">
+                <svg class="w-6 h-6 text-primary transition-transform duration-500 group-hover:rotate-90" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="50" y="8" width="59.4" height="59.4" transform="rotate(45 50 8)" stroke="currentColor" stroke-width="12" />
+                    <rect x="50" y="32" width="25.4" height="25.4" transform="rotate(45 50 32)" fill="currentColor" />
+                </svg>
+                <span class="font-space font-bold tracking-tight text-xl text-text-main group-hover:text-primary transition-colors">
+                    Stuttgart KI Profis
+                </span>
+            </a>
+
+            <!-- Desktop Navigation links -->
+            <div class="hidden md:flex items-center space-x-8 font-mono text-xs tracking-wider">
+                <a href="/angebotsassistent.html" class="text-muted hover:text-primary transition-colors">ANGEBOTSASSISTENT</a>
+                <a href="/about.html" class="text-muted hover:text-primary transition-colors">UBER MICH</a>
+                <a href="/#prozess" class="text-muted hover:text-primary transition-colors">PROZESS</a>
+                <a href="/beratung.html#kontakt" class="text-muted hover:text-primary transition-colors">KONTAKT</a>
+            </div>
+
+            <!-- Desktop Brand Action -->
+            <div class="hidden md:block">
+                <a href="/beratung.html#kontakt" class="font-mono text-xs border border-border px-6 py-2.5 text-text-main hover:border-primary hover:text-primary transition-all duration-300">
+                    Termin buchen
+                </a>
+            </div>
+
+            <!-- Mobile responsive Menu Toggle -->
+            <button id="mobile-menu-btn" class="md:hidden flex items-center justify-center p-2 text-text-main hover:text-primary focus:outline-none" aria-label="Menu">
+                <span class="material-symbols-outlined text-2xl" id="menu-icon">menu</span>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer menu -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 w-full bg-bg border-b border-border py-6 px-6 flex flex-col space-y-4 font-mono text-xs tracking-wider">
+            <a href="/angebotsassistent.html" class="text-muted hover:text-primary transition-colors py-2 block border-b border-border/40" onclick="toggleMobileMenu()">ANGEBOTSASSISTENT</a>
+            <a href="/about.html" class="text-muted hover:text-primary transition-colors py-2 block border-b border-border/40" onclick="toggleMobileMenu()">UBER MICH</a>
+            <a href="/#prozess" class="text-muted hover:text-primary transition-colors py-2 block border-b border-border/40" onclick="toggleMobileMenu()">PROZESS</a>
+            <a href="/beratung.html#kontakt" class="text-muted hover:text-primary transition-colors py-2 block border-b border-border/40" onclick="toggleMobileMenu()">KONTAKT</a>
+            <a href="/beratung.html#kontakt" class="border border-border py-3 text-center text-text-main hover:border-primary hover:text-primary transition-all duration-300 block" onclick="toggleMobileMenu()">
+                Termin buchen
+            </a>
+        </div>
+    </nav>
+
+    <!-- 2. HERO SECTION -->
+    <!-- 2. HERO SECTION -->
+    <section id="hero" class="min-h-screen flex items-center pt-28 pb-16 relative z-10 px-6 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center w-full">
+            <div class="col-span-1 lg:col-span-7 flex flex-col justify-center space-y-6">
+                <div class="inline-flex items-center space-x-2 border border-border bg-surface px-3 py-1 text-xs font-mono text-muted w-fit">
+                    <span class="w-1.5 h-1.5 bg-primary rounded-full pulse-dot"></span>
+                    <span>WhatsApp KI // Produktiv</span>
+                </div>
+                <h1 class="font-space text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-bold leading-[1.05] tracking-tight text-text-main">
+                    Sprachnachricht rein.<br><span class="text-primary">Angebot raus.</span> In Sekunden.
+                </h1>
+                <p class="text-muted text-base sm:text-lg md:text-xl font-light leading-relaxed max-w-2xl">
+                    Diktieren Sie Ihre Leistung per WhatsApp -- unsere KI matched sie mit Ihrer Preisliste und erstellt ein fertiges PDF-Angebot. Kein Schreiben, kein Kopieren, kein Suchen alter Vorlagen.
+                </p>
+                <div class="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                    <a href="#onboarding-start" class="glow-cta bg-primary text-bg font-space font-bold text-center px-8 py-4 text-base hover:bg-[#00E592]">
+                        Jetzt kostenlos testen
+                    </a>
+                    <a href="#funktionsweise" class="border border-border hover:border-primary text-text-main hover:text-primary transition-all duration-300 font-mono text-xs tracking-wider text-center px-8 py-4">
+                        SO FUNKTIONIERT
+                    </a>
+                </div>
+                <div class="flex flex-wrap items-center gap-4 text-xs font-mono text-muted pt-2">
+                    <span class="flex items-center gap-1"><span class="text-primary">-</span> 14 Tage kostenlos</span>
+                    <span class="flex items-center gap-1"><span class="text-primary">-</span> Keine Kreditkarte</span>
+                    <span class="flex items-center gap-1"><span class="text-primary">-</span> In 10 Minuten live</span>
+                    <span class="flex items-center gap-1"><span class="text-primary">-</span> DSGVO-konform</span>
+                </div>
+            </div>
+            <div class="col-span-1 lg:col-span-5 relative w-full h-[350px] sm:h-[450px] lg:h-[480px]">
+                <div class="absolute inset-0 border border-border bg-surface flex flex-col h-full">
+                    <div class="flex items-center justify-between border-b border-border bg-[#0E0E11] px-4 py-2.5 font-mono text-[10px] text-muted">
+                        <div class="flex items-center space-x-2">
+                            <span class="material-symbols-outlined text-xs text-primary">chat</span>
+                            <span>WHATSAPP_AGENT.exe</span>
+                        </div>
+                        <div class="flex items-center space-x-3 select-none">
+                            <span>--</span>
+                            <span>SQ</span>
+                            <span class="text-red-500/80">X</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 relative overflow-hidden bg-grid-cyber bg-bg p-6 flex flex-col items-center justify-center">
+                        <div class="border border-border bg-[#141417]/90 px-4 py-3 font-mono text-[10px] backdrop-blur-sm w-full max-w-xs mb-3">
+                            <div class="flex items-center space-x-2 text-primary font-bold">
+                                <span class="material-symbols-outlined text-sm">mic</span>
+                                <span class="tracking-wider">[1] SPRACHNACHRICHT</span>
+                            </div>
+                            <div class="text-text-main mt-1 text-xs">"Ein neues Bad bei Muster, 3 Heizkorper, 12 Steckdosen..."</div>
+                        </div>
+                        <span class="text-primary text-xs font-mono mb-3">v</span>
+                        <div class="border border-border bg-[#141417]/90 px-4 py-3 font-mono text-[10px] backdrop-blur-sm w-full max-w-xs mb-3">
+                            <div class="flex items-center space-x-2 text-accent font-bold">
+                                <span class="material-symbols-outlined text-sm">auto_awesome</span>
+                                <span class="tracking-wider">[2] KI-PREISANALYSE</span>
+                            </div>
+                            <div class="text-text-main mt-1 text-xs">Leistungen erkannt // Preisliste gematched</div>
+                            <div class="text-muted text-[8px] mt-0.5">2.341,50 EUR // 12 Positionen</div>
+                        </div>
+                        <span class="text-primary text-xs font-mono mb-3">v</span>
+                        <div class="border border-border bg-[#141417]/90 px-4 py-3 font-mono text-[10px] backdrop-blur-sm w-full max-w-xs">
+                            <div class="flex items-center space-x-2 text-primary font-bold">
+                                <span class="material-symbols-outlined text-sm">description</span>
+                                <span class="tracking-wider">[3] PDF-ANGEBOT</span>
+                            </div>
+                            <div class="text-text-main mt-1 text-xs">Angebot_2025_Muster.pdf</div>
+                            <div class="text-muted text-[8px] mt-0.5">Erstellt in 47 Sekunden // 2,3 MB</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="funktionsweise" class="py-24 border-t border-border bg-bg relative overflow-hidden">
+        <div class="absolute left-0 bottom-0 w-[500px] h-[500px] radial-glow-green opacity-40 pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="mb-16">
+                <span class="font-mono text-primary text-xs uppercase tracking-widest">[01 / FUNKTION]</span>
+                <h2 class="font-space text-3xl md:text-5xl font-bold mt-2">Wie es funktioniert</h2>
+                <p class="text-muted text-base font-light mt-4 max-w-2xl">Drei Schritte, die Sie in unter 10 Minuten einrichten -- und dann jeden Tag Zeit sparen.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="border border-border bg-surface p-8 relative group hover:border-primary/40 transition-all">
+                    <div class="font-space text-6xl font-bold text-primary/10 absolute top-4 right-6 select-none">01</div>
+                    <div class="w-12 h-12 border border-border flex items-center justify-center mb-8 text-primary bg-bg/50">
+                        <svg width="28" height="28" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11.42 9.49c-.19-.09-1.1-.54-1.27-.61s-.29-.09-.42.1-.48.6-.59.73-.21.14-.4 0a5.13 5.13 0 0 1-1.49-.92 5.25 5.25 0 0 1-1-1.29c-.11-.18 0-.28.08-.38s.18-.21.28-.32a1.39 1.39 0 0 0 .18-.31.38.38 0 0 0 0-.33c0-.09-.42-1-.58-1.37s-.3-.32-.41-.32h-.4a.72.72 0 0 0-.5.23 2.1 2.1 0 0 0-.65 1.55A3.59 3.59 0 0 0 5 8.2 8.32 8.32 0 0 0 8.19 11c.44.19.78.3 1.05.39a2.53 2.53 0 0 0 1.17.07 1.93 1.93 0 0 0 1.26-.88 1.67 1.67 0 0 0 .11-.88c-.05-.07-.17-.12-.36-.21z" fill="#00FFA3"/>
+                            <path d="M13.29 2.68A7.36 7.36 0 0 0 8 .5a7.44 7.44 0 0 0-6.41 11.15l-1 3.85 3.94-1a7.4 7.4 0 0 0 3.55.9H8a7.44 7.44 0 0 0 5.29-12.72zM8 14.12a6.12 6.12 0 0 1-3.15-.87l-.22-.13-2.34.61.62-2.28-.14-.23a6.18 6.18 0 0 1 9.6-7.65 6.12 6.12 0 0 1 1.81 4.37A6.19 6.19 0 0 1 8 14.12z" fill="#00FFA3"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-space font-bold text-xl text-text-main">WhatsApp verbinden</h3>
+                    <p class="text-muted text-sm font-light mt-3 leading-relaxed">Sie geben Ihre Handynummer an. Wir schalten die KI auf Ihre WhatsApp-Nummer frei. Fertig -- kein Login, kein Dashboard.</p>
+                </div>
+                <div class="border border-border bg-surface p-8 relative group hover:border-primary/40 transition-all">
+                    <div class="font-space text-6xl font-bold text-primary/10 absolute top-4 right-6 select-none">02</div>
+                    <div class="w-12 h-12 border border-border flex items-center justify-center mb-8 text-primary bg-bg/50">
+                        <span class="material-symbols-outlined text-2xl">price_change</span>
+                    </div>
+                    <h3 class="font-space font-bold text-xl text-text-main">Preisliste hinterlegen</h3>
+                    <p class="text-muted text-sm font-light mt-3 leading-relaxed">Sie laden Ihre Preisliste einmal hoch (PDF, Excel oder Foto). Die KI lernt Ihre Preise pro Einheit -- und weicht nie davon ab.</p>
+                </div>
+                <div class="border border-border bg-surface p-8 relative group hover:border-primary/40 transition-all">
+                    <div class="font-space text-6xl font-bold text-primary/10 absolute top-4 right-6 select-none">03</div>
+                    <div class="w-12 h-12 border border-border flex items-center justify-center mb-8 text-primary bg-bg/50">
+                        <span class="material-symbols-outlined text-2xl">send</span>
+                    </div>
+                    <h3 class="font-space font-bold text-xl text-text-main">Sprachnachricht senden</h3>
+                    <p class="text-muted text-sm font-light mt-3 leading-relaxed">Sie schicken eine Sprachnachricht. Die KI transkribiert, matched mit Ihrer Preisliste und sendet Ihnen das fertige PDF-Angebot zuruck -- in unter 2 Minuten.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 border-t border-border bg-[#0C0C0F] relative overflow-hidden">
+        <div class="absolute inset-x-0 bottom-0 h-[300px] radial-glow-blue opacity-30 pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="mb-16">
+                <span class="font-mono text-primary text-xs uppercase tracking-widest">[02 / ZIELGRUPPE]</span>
+                <h2 class="font-space text-3xl md:text-5xl font-bold mt-2">Für wen sich dieser Assistent lohnt</h2>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="border border-border bg-surface p-6 text-center group hover:border-primary/60 transition-all">
+                    <span class="material-symbols-outlined text-3xl text-primary">format_paint</span>
+                    <p class="font-space font-bold text-text-main text-sm mt-3">Maler & Lackierer</p>
+                    <p class="font-mono text-[10px] text-muted mt-1">~4-10 Angebote/Woche</p>
+                </div>
+                <div class="border border-border bg-surface p-6 text-center group hover:border-primary/60 transition-all">
+                    <span class="material-symbols-outlined text-3xl text-primary">plumbing</span>
+                    <p class="font-space font-bold text-text-main text-sm mt-3">SHK</p>
+                    <p class="font-mono text-[10px] text-muted mt-1">~8-15 Angebote/Woche</p>
+                </div>
+                <div class="border border-border bg-surface p-6 text-center group hover:border-primary/60 transition-all">
+                    <span class="material-symbols-outlined text-3xl text-primary">bolt</span>
+                    <p class="font-space font-bold text-text-main text-sm mt-3">Elektro</p>
+                    <p class="font-mono text-[10px] text-muted mt-1">~5-12 Angebote/Woche</p>
+                </div>
+                <div class="border border-border bg-surface p-6 text-center group hover:border-primary/60 transition-all">
+                    <span class="material-symbols-outlined text-3xl text-primary">roofing</span>
+                    <p class="font-space font-bold text-text-main text-sm mt-3">Dachdecker</p>
+                    <p class="font-mono text-[10px] text-muted mt-1">~4-8 Angebote/Woche</p>
+                </div>
+                <div class="border border-border bg-surface p-6 text-center group hover:border-primary/60 transition-all">
+                    <span class="material-symbols-outlined text-3xl text-primary">handyman</span>
+                    <p class="font-space font-bold text-text-main text-sm mt-3">Schreiner</p>
+                    <p class="font-mono text-[10px] text-muted mt-1">~3-8 Angebote/Woche</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="preise" class="py-24 border-t border-border bg-bg relative overflow-hidden">
+        <div class="absolute right-0 top-1/4 w-[500px] h-[500px] radial-glow-green opacity-20 pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="mb-16">
+                <span class="font-mono text-primary text-xs uppercase tracking-widest">[03 / PREISE]</span>
+                <h2 class="font-space text-3xl md:text-5xl font-bold mt-2">Einfach, transparent, fair</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="border border-border bg-surface p-8 relative group hover:border-primary/40 transition-all">
+                    <div class="font-mono text-[10px] text-primary bg-primary/5 border border-primary/20 px-2 py-0.5 uppercase tracking-wide inline-block">Basis</div>
+                    <div class="mt-6"><span class="font-space font-bold text-4xl text-text-main">19</span><span class="font-mono text-sm text-muted ml-1">EUR/Monat</span></div>
+                    <ul class="mt-6 space-y-3 font-mono text-xs text-muted/95">
+                        <li class="flex items-center space-x-2"><span class="text-primary text-[10px]">-</span><span>Bis zu 30 Angebote/Monat</span></li>
+                        <li class="flex items-center space-x-2"><span class="text-primary text-[10px]">-</span><span>WhatsApp-Integration</span></li>
+                        <li class="flex items-center space-x-2"><span class="text-primary text-[10px]">-</span><span>1 Preisliste</span></li>
+                        <li class="flex items-center space-x-2"><span class="text-primary text-[10px]">-</span><span>PDF-Export</span></li>
+                    </ul>
+                    <a href="#onboarding-start" class="mt-8 block glow-cta bg-primary text-bg font-space font-bold text-center px-6 py-3 text-sm hover:bg-[#00E592]">Jetzt starten</a>
+                </div>
+                <div class="border border-primary/40 bg-surface p-8 relative group hover:border-primary/70 transition-all scale-[1.02]">
+                    <div class="absolute top-0 right-0 bg-primary text-bg px-3 py-1 font-mono text-[10px] font-bold">EMPFEHLUNG</div>
+                    <div class="font-mono text-[10px] text-primary bg-primary/5 border border-primary/20 px-2 py-0.5 uppercase tracking-wide inline-block">Professional</div>
+                    <div class="mt-6"><span class="font-space font-bold text-4xl text-text-main">49</span><span class="font-mono text-sm text-muted ml-1">EUR/Monat</span></div>
+                    <ul class="mt-6 space-y-3 font-mono text-xs text-muted/95">
+                        <li class="flex items-center space-x-2"><span class="text-primary text-[10px]">-</span><span>Unbegrenzte Angebote</span></li>
+                        <li class="flex items-center space-x-2"><span class="text-primary text-[10px]">-</span><span>WhatsApp-Integration</span></li>
+                        <li class="flex items-center space-x-2"><span class="text-primary text-[10px]">-</span><span>Bis zu 3 Preislisten</span></li>
+                        <li class="flex items-center space-x-2"><span class="text-primary text-[10px]">-</span><span>PDF-Export + Firmenlogo</span></li>
+                        <li class="flex items-center space-x-2"><span class="text-primary text-[10px]">-</span><span>Prioritats-Support (WhatsApp)</span></li>
+                    </ul>
+                    <a href="#onboarding-start" class="mt-8 block glow-cta bg-primary text-bg font-space font-bold text-center px-6 py-3 text-sm hover:bg-[#00E592]">Empfohlen -- Jetzt starten</a>
+                </div>
+                <div class="border border-border bg-surface p-8 relative group hover:border-primary/40 transition-all">
+                    <div class="font-mono text-[10px] text-primary bg-primary/5 border border-primary/20 px-2 py-0.5 uppercase tracking-wide inline-block">Business</div>
+                    <div class="mt-6"><span class="font-space font-bold text-4xl text-text-main">99</span><span class="font-mono text-sm text-muted ml-1">EUR/Monat</span></div>
+                    <ul class="mt-6 space-y-3 font-mono text-xs text-muted/95">
+                        <li class="flex items-center space-x-2"><span class="text-primary text-[10px]">-</span><span>Unbegrenzte Angebote</span></li>
+                        <li class="flex items-center space-x-2"><span class="text-primary text-[10px]">-</span><span>WhatsApp-Integration</span></li>
+                        <li class="flex items-center space-x-2"><span class="text-primary text-[10px]">-</span><span>Unbegrenzte Preislisten</span></li>
+                        <li class="flex items-center space-x-2"><span class="text-primary text-[10px]">-</span><span>White-Label PDF</span></li>
+                        <li class="flex items-center space-x-2"><span class="text-primary text-[10px]">-</span><span>API-Zugang</span></li>
+                        <li class="flex items-center space-x-2"><span class="text-primary text-[10px]">-</span><span>Prioritats-Support (Telefon)</span></li>
+                    </ul>
+                    <a href="#onboarding-start" class="mt-8 block border border-border text-text-main font-space font-bold text-center px-6 py-3 text-sm hover:border-primary hover:text-primary transition-all">Kontaktieren Sie uns</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 border-t border-border bg-[#0C0C0F] relative overflow-hidden">
+        <div class="max-w-3xl mx-auto px-6 relative z-10">
+            <div class="mb-16">
+                <span class="font-mono text-primary text-xs uppercase tracking-widest">[04 / FAQ]</span>
+                <h2 class="font-space text-3xl md:text-5xl font-bold mt-2">Häufig gestellte Fragen</h2>
+            </div>
+            <div class="space-y-4">
+                <div class="border border-border bg-surface p-6">
+                    <h3 class="font-space font-bold text-text-main text-base">Brauche ich IT-Kenntnisse?</h3>
+                    <p class="text-muted text-sm font-light mt-2 leading-relaxed">Nein. Sie brauchen nur ein Smartphone mit WhatsApp. Wir übernehmen die gesamte Einrichtung -- in unter 10 Minuten.</p>
+                </div>
+                <div class="border border-border bg-surface p-6">
+                    <h3 class="font-space font-bold text-text-main text-base">Kann ich meine eigenen Preise verwenden?</h3>
+                    <p class="text-muted text-sm font-light mt-2 leading-relaxed">Ja. Sie laden Ihre Preisliste einmal hoch (PDF, Excel oder Foto). Die KI matched jede Leistung exakt mit Ihren hinterlegten Preisen -- keine Halluzinationen.</p>
+                </div>
+                <div class="border border-border bg-surface p-6">
+                    <h3 class="font-space font-bold text-text-main text-base">Ist das DSGVO-konform?</h3>
+                    <p class="text-muted text-sm font-light mt-2 leading-relaxed">Ja. Alle Daten werden auf deutschen Servern verarbeitet. Wir speichern keine Sprachaufnahmen, nur die transkribierten Texte für die Angebotserstellung.</p>
+                </div>
+                <div class="border border-border bg-surface p-6">
+                    <h3 class="font-space font-bold text-text-main text-base">Was kostet das genau?</h3>
+                    <p class="text-muted text-sm font-light mt-2 leading-relaxed">19 EUR/Monat für bis zu 30 Angebote. Keine versteckten Kosten, keine Einrichtungsgebuhr. 14 Tage kostenlos testen, dann entscheiden Sie.</p>
+                </div>
+                <div class="border border-border bg-surface p-6">
+                    <h3 class="font-space font-bold text-text-main text-base">Kann ich kündigen?</h3>
+                    <p class="text-muted text-sm font-light mt-2 leading-relaxed">Jederzeit. Monatlich kündbar. Keine Mindestlaufzeit. Kein Risiko.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="onboarding-start" class="py-24 border-t border-border bg-bg relative overflow-hidden">
+        <div class="absolute inset-x-0 top-0 h-[400px] radial-glow-green opacity-40 pointer-events-none"></div>
+        <div class="max-w-4xl mx-auto px-6 relative z-10">
+            <div class="border border-border bg-surface p-8 md:p-12 text-center">
+                <span class="font-mono text-primary text-xs uppercase tracking-widest">[05 / START]</span>
+                <h2 class="font-space text-3xl md:text-5xl font-bold mt-4 text-text-main">In 10 Minuten einsatzbereit</h2>
+                <p class="text-muted text-base font-light mt-4 max-w-xl mx-auto leading-relaxed">
+                    Hinterlassen Sie Ihre Nummer. Wir schalten Sie frei -- und Sie schicken Ihre erste Sprachnachricht.
+                    Kein Download, kein Papierkram, keine Kreditkarte.
+                </p>
+                <div class="mt-10 max-w-lg mx-auto border border-border bg-[#0E0E11] p-6 md:p-8 text-left">
+                    <div class="flex items-center space-x-2 mb-6">
+                        <span class="w-1.5 h-1.5 bg-primary rounded-full pulse-dot"></span>
+                        <span class="font-mono text-[10px] text-primary uppercase tracking-widest">BLITZ-START</span>
+                    </div>
+                    <div class="space-y-5">
+                        <div>
+                            <label class="block font-mono text-[10px] text-muted uppercase tracking-wider mb-2">1. Gewerk auswahlen</label>
+                            <div class="grid grid-cols-2 gap-2" id="trade-selector">
+                                <button data-trade="maler" class="border border-border bg-surface px-3 py-2 font-mono text-xs text-muted hover:border-primary hover:text-primary transition-all text-left">Maler</button>
+                                <button data-trade="shk" class="border border-border bg-surface px-3 py-2 font-mono text-xs text-muted hover:border-primary hover:text-primary transition-all text-left">SHK</button>
+                                <button data-trade="elektro" class="border border-border bg-surface px-3 py-2 font-mono text-xs text-muted hover:border-primary hover:text-primary transition-all text-left">Elektro</button>
+                                <button data-trade="anderes" class="border border-border bg-surface px-3 py-2 font-mono text-xs text-muted hover:border-primary hover:text-primary transition-all text-left">Anderes</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-mono text-[10px] text-muted uppercase tracking-wider mb-2">2. Tarif wahlen</label>
+                            <div class="grid grid-cols-3 gap-2" id="plan-selector">
+                                <button data-plan="basic" class="onboarding-plan border border-border bg-surface px-3 py-2 font-mono text-xs text-muted hover:border-primary hover:text-primary transition-all text-center">
+                                    <span class="block text-text-main font-bold text-sm">19<span class="text-muted font-normal text-[9px] ml-0.5">&euro;</span></span>
+                                    <span class="text-[9px]">Basis</span>
+                                </button>
+                                <button data-plan="professional" class="onboarding-plan border border-primary/60 bg-surface px-3 py-2 font-mono text-xs text-primary hover:border-primary transition-all text-center relative selected">
+                                    <span class="absolute -top-1.5 right-1 text-[8px] bg-primary text-bg px-1 py-0.5 font-bold">TOP</span>
+                                    <span class="block font-bold text-sm">49<span class="text-muted font-normal text-[9px] ml-0.5">&euro;</span></span>
+                                    <span class="text-[9px]">Professional</span>
+                                </button>
+                                <button data-plan="business" class="onboarding-plan border border-border bg-surface px-3 py-2 font-mono text-xs text-muted hover:border-primary hover:text-primary transition-all text-center">
+                                    <span class="block text-text-main font-bold text-sm">99<span class="text-muted font-normal text-[9px] ml-0.5">&euro;</span></span>
+                                    <span class="text-[9px]">Business</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-mono text-[10px] text-muted uppercase tracking-wider mb-2">3. WhatsApp-Nummer</label>
+                            <input type="tel" placeholder="+49 176 ..." class="w-full bg-transparent border-b border-border py-2 text-text-main placeholder-muted/40 focus:outline-none focus:border-primary transition-colors text-sm font-mono">
+                        </div>
+                        <div>
+                            <label class="block font-mono text-[10px] text-muted uppercase tracking-wider mb-2">4. Preisliste (optional)</label>
+                            <div class="border border-dashed border-border bg-surface p-4 text-center">
+                                <span class="material-symbols-outlined text-muted text-2xl">upload_file</span>
+                                <p class="font-mono text-[10px] text-muted mt-1">PDF, Excel oder Foto</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <a href="#" class="block glow-cta bg-primary text-bg font-space font-bold text-center px-6 py-3.5 text-sm hover:bg-[#00E592] transition-all">
+                            Test-Zugang freischalten
+                        </a>
+                    </div>
+                    <div class="mt-4 flex flex-wrap justify-center gap-4 text-[10px] font-mono text-muted">
+                        <span>Keine Kreditkarte</span>
+                        <span>14 Tage kostenlos</span>
+                        <span>Monatlich kündbar</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Onboarding button selection
+        (function() {
+            // Trade selection
+            var tradeContainer = document.getElementById('trade-selector');
+            if (tradeContainer) {
+                var tradeBtns = tradeContainer.querySelectorAll('button');
+                tradeBtns.forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        tradeBtns.forEach(function(b) { b.classList.remove('selected'); });
+                        this.classList.add('selected');
+                    });
+                });
+            }
+
+            // Plan selection
+            var planContainer = document.getElementById('plan-selector');
+            if (planContainer) {
+                var planBtns = planContainer.querySelectorAll('button');
+                planBtns.forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        planBtns.forEach(function(b) { b.classList.remove('selected'); });
+                        this.classList.add('selected');
+                    });
+                });
+            }
+        })();
+    </script>
+
+    <footer class="py-12 border-t border-border bg-bg">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+            <!-- Brand emblem logo -->
+            <a href="#hero" class="flex items-center space-x-3">
+                <svg class="w-5 h-5 text-primary" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="50" y="8" width="59.4" height="59.4" transform="rotate(45 50 8)" stroke="currentColor" stroke-width="12" />
+                    <rect x="50" y="32" width="25.4" height="25.4" transform="rotate(45 50 32)" fill="currentColor" />
+                </svg>
+                <span class="font-space font-bold text-base text-text-main">
+                    Stuttgart KI Profis
+                </span>
+            </a>
+
+            <!-- System copyright / operational tags / legals -->
+            <div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 font-mono text-xs text-muted">
+                <button onclick="toggleModal('impressum-modal')" class="hover:text-primary transition-colors">Impressum</button>
+                <button onclick="toggleModal('datenschutz-modal')" class="hover:text-primary transition-colors">Datenschutz</button>
+                <span class="text-border">|</span>
+                <span>© 2026 Stuttgart KI Profis. All systems operational.</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE MOCK TERMINAL POPUPS (LEGAL INFRASTRUCTURE) -->
+    <!-- Impressum Modal frame -->
+    <div id="impressum-modal" class="fixed inset-0 bg-bg/95 backdrop-blur-md z-50 flex items-center justify-center p-6 hidden">
+        <div class="border border-border bg-surface p-6 md:p-8 max-w-2xl w-full font-mono text-xs md:text-sm max-h-[85vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-border pb-4 mb-6">
+                <span class="text-primary font-bold">> IMPRESSUM.sh</span>
+                <button onclick="toggleModal('impressum-modal')" class="text-muted hover:text-red-500 font-bold">✕ CLOSE</button>
+            </div>
+            <div class="space-y-4 text-muted leading-relaxed">
+                <p class="text-text-main font-bold">Johannes Flohe</p>
+                <p>Hohentwielstraße 124<br>70199 Stuttgart</p>
+                <p><strong>Kontakt:</strong><br>E-Mail: johannes@stuttgart-ki-profis.de<br>Tel: +49 176 9769699</p>
+                <p><strong>Umsatzsteuer-ID:</strong><br>Beantragt (Kleinunternehmerregelung gemäß § 19 UStG)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Datenschutz Modal frame -->
+    <div id="datenschutz-modal" class="fixed inset-0 bg-bg/95 backdrop-blur-md z-50 flex items-center justify-center p-6 hidden">
+        <div class="border border-border bg-surface p-6 md:p-8 max-w-2xl w-full font-mono text-xs md:text-sm max-h-[85vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-border pb-4 mb-6">
+                <span class="text-primary font-bold">> DATENSCHUTZEINSTELLUNG.sh</span>
+                <button onclick="toggleModal('datenschutz-modal')" class="text-muted hover:text-red-500 font-bold">✕ CLOSE</button>
+            </div>
+            <div class="space-y-4 text-muted leading-relaxed text-left">
+                <p class="text-text-main font-bold">1. Datenschutz auf einen Blick</p>
+                <p>Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Personenbezogene Daten werden auf dieser Website nur im technisch notwendigen Umfang (z. B. im Kontakt-Terminal) verarbeitet. Die Daten werden niemals ohne Ihre explizite Zustimmung an Dritte weitergegeben.</p>
+                <p class="text-text-main font-bold">2. Datenerfassung auf unserer Website</p>
+                <p>Das Kontakt-Terminal speichert Ihre eingegebenen Daten (Name, E-Mail, Nachricht) ausschließlich zum Zweck der direkten Kontaktaufnahme. Es erfolgt eine verschlüsselte Übertragung über HTTPS.</p>
+                <p class="text-text-main font-bold">3. Hosting & Serverstandort</p>
+                <p>Unsere Systeme und diese Website werden auf hochsicheren Servern in Deutschland gehostet (100% DSGVO-konform).</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CLIENT LOGIC AND SCRIPT INJECTION -->
+    <script>
+        // Drawer Menu handling
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+
+        mobileBtn.addEventListener('click', () => {
+            const isOpen = !mobileMenu.classList.contains('hidden');
+            if (isOpen) {
+                mobileMenu.classList.add('hidden');
+                menuIcon.textContent = 'menu';
+            } else {
+                mobileMenu.classList.remove('hidden');
+                menuIcon.textContent = 'close';
+            }
+        });
+
+        function toggleMobileMenu() {
+            mobileMenu.classList.add('hidden');
+            menuIcon.textContent = 'menu';
+        }
+
+        // Modal triggers
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Vertical scroll progress bar dynamic indicator mapping
+        window.addEventListener('scroll', () => {
+            const timeline = document.getElementById('timeline-section');
+            const progressBar = document.getElementById('timeline-progress-bar');
+            if (timeline && progressBar) {
+                const rect = timeline.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                
+                // Calculate percentage of the section scrolled through the viewport
+                const totalHeight = rect.height;
+                const progressStartHeight = windowHeight * 0.7; // start track when 70% from top
+                const progressEndHeight = windowHeight * 0.3;   // stop when near 30% from top
+                
+                const relativeY = rect.top - progressStartHeight;
+                let percentage = (relativeY / -totalHeight) * 100;
+                percentage = Math.max(0, Math.min(100, percentage));
+                
+                progressBar.style.height = `${percentage}%`;
+            }
+        });
+
+        // Contact Terminal compiling submission simulator log
+        const contactForm = document.getElementById('contact-form');
+        const terminalLog = document.getElementById('terminal-log');
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // visually freeze input form controls during deployment log display
+            contactForm.classList.add('opacity-40');
+            const inputs = contactForm.querySelectorAll('input, textarea, button');
+            inputs.forEach(input => input.setAttribute('disabled', 'true'));
+
+            // clear log block and showcase
+            terminalLog.classList.remove('hidden');
+            terminalLog.innerHTML = '';
+
+            const logLines = [
+                { text: '> Ihre Nachricht wird übermittelt...', delay: 300, color: 'text-muted' },
+                { text: '> Verschlüsselte Übertragung (AES-256)...', delay: 700, color: 'text-muted' },
+                { text: '> Verbindung zu Stuttgart KI Profis hergestellt.', delay: 1100, color: 'text-primary' },
+                { text: '> Ihre Daten wurden erfolgreich übermittelt.', delay: 1500, color: 'text-primary' },
+                { text: '------------------------------------------------------------', delay: 1800, color: 'text-border' },
+                { text: '>> Vielen Dank für Ihre Nachricht!', delay: 2100, color: 'text-text-main font-bold' },
+                { text: '>> Wir melden uns innerhalb von 24 Stunden bei Ihnen.', delay: 2400, color: 'text-text-main font-light' },
+            ];
+
+            logLines.forEach((line) => {
+                setTimeout(() => {
+                    const p = document.createElement('p');
+                    p.className = `${line.color} leading-relaxed`;
+                    p.textContent = line.text;
+                    terminalLog.appendChild(p);
+                    // scroll to bottom of parent section
+                    const section = document.getElementById('kontakt');
+                    if (section) {
+                        section.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                    }
+                }, line.delay);
+            });
+        });
+    </script>
+
+    <!-- Cookie Banner -->
+    <div id="cookie-banner" role="dialog" aria-label="Cookie-Einstellungen">
+        <div class="inner">
+            <p>
+                Diese Website verwendet nur technisch notwendige Cookies, um die grundlegende Funktionalität zu gewährleisten. Keine Tracking- oder Analyse-Cookies.
+                <a href="#" onclick="toggleModal('datenschutz-modal'); return false;">Mehr erfahren</a>
+            </p>
+            <div style="display: flex; gap: 0.5rem; flex-shrink: 0;">
+                <button id="cookie-btn-decline">Nur notwendige</button>
+                <button id="cookie-btn-accept">Verstanden</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cookie Banner Logic
+        (function() {
+            var banner = document.getElementById('cookie-banner');
+            var acceptBtn = document.getElementById('cookie-btn-accept');
+            var declineBtn = document.getElementById('cookie-btn-decline');
+
+            function setCookiePref(value) {
+                try {
+                    localStorage.setItem('cookie_consent', value);
+                } catch(e) {
+                    // fallback if localStorage is blocked
+                    document.cookie = 'cookie_consent=' + value + '; path=/; max-age=31536000';
+                }
+                banner.classList.remove('show');
+                setTimeout(function() { banner.style.display = 'none'; }, 500);
+            }
+
+            try {
+                var pref = localStorage.getItem('cookie_consent');
+                if (!pref) {
+                    // no preference saved — show banner
+                    setTimeout(function() { banner.classList.add('show'); }, 800);
+                }
+            } catch(e) {
+                // localStorage unavailable — show banner
+                setTimeout(function() { banner.classList.add('show'); }, 800);
+            }
+
+            acceptBtn.addEventListener('click', function() { setCookiePref('accepted'); });
+            declineBtn.addEventListener('click', function() { setCookiePref('declined'); });
+        })();
+    </script>
+</body>
+</html>
